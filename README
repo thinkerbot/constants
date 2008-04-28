@@ -1,32 +1,29 @@
-= Molecule
+= Constants
 
-Libraries of molecules ready for mass, abundance, and isotope calculations.  
+Libraries of physical and chemical constants for scientific calculations.
 
 == Description
-Molecule provides a way to specify molecules by formula and perform common calculations therefrom, such as calculating mass.  Molecule was developed for use in mass spectrometry of proteins where high mass accuracy and sensitivity to isotope abundance is required, and has special functionality for the proteomics field.  The fundamental library is general and easily adaptable to other projects.  
 
-Please notify me through RubyForge if you would like to contribute.
+Constants provides libraries of constant values (such as the precise mass of carbon 13, or the 
+spin of a strange quark).  Moreover, the general ConstantsLibrary module is provided to facilitate
+easy, flexible lookup of constants.
 
 == Usage
 
-  require 'molecule'
-  include Molecule
+  require 'constants'
+  include Constants::Library
   
-  # Definition of a molecule
-  water = Formula.new("H2O")
-  water.mass            # => 18.0105646
-  
-  # Molecule predfines a library for Amino Acid residues
-  a = Residue::A
-  a.name                 # => "Alanine"
-  a.abbr                  # => "Ala"
-  a.formula              # => "C3H5NO"
+  # Element predefines all chemical elements
+  c = Element::C
+  c.name                 # => "Carbon"
+  c.symbol               # => "C"
+  c.atomic_number        # => 12
+  c.mass(13)             # => 13.0033548378
   
   # A smorgasbord of lookup methods
-  a == Residue.A                             # => true
-  a == Residue.a                             # => true
-  a == Residue.ala                          # => true
-  a == Residue.alanine                    # => true
+  c == Element.Carbon         # => true
+  c == Element.C              # => true
+  c == Residue.12             # => true
   
 == Info 
 
@@ -37,11 +34,22 @@ Licence:: MIT-Style
 
 == Installation
 
-Molecule is available as a gem on RubyForge[http://rubyforge.org/projects/bioactive].  Use:
+Constants is available as a gem through GitHub[http://github.com/bahuvrihi/constants/tree/master].  Use:
 
-  % gem install molecule
+  % gem install constants --source=http://gems.github.com/
 
 == Element Data
 
-Element isotope, mass, and abundance information was obtained from the NIST {Atomic Weights and Isotopic Compositions}[http://www.physics.nist.gov/PhysRefData/Compositions/index.html] reference.  All isotopes with a non-nil isotopic composition (ie relative abundance) were compiled from this {view}[http://www.physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=&all=all&ascii=ascii2&isotype=all] on 2008-01-22. 
+Element isotope, mass, and abundance information was obtained from the NIST {Atomic Weights and Isotopic Compositions}[http://www.physics.nist.gov/PhysRefData/Compositions/index.html] reference.  All isotopes 
+with a non-nil isotopic composition (ie relative abundance) were compiled from this {view}[http://www.physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=&all=all&ascii=ascii2&isotype=all] 
+on 2008-01-22. 
 
+== Physical Constant Data
+
+The physical constant data is assembled from the NIST {Fundamental Physical Constants}[http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt]
+on 2008-04-28.
+
+== Particle Data
+
+Particle data was assembled from a non-ideal source, wikipedia[http://www.wikipedia.org/], and will remain
+so until I have time to update it with a more reputable scientific source.

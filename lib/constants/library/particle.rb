@@ -1,15 +1,9 @@
 require 'constants_library'
 require 'constants/constant'
 
-class Unit < Numeric
-  UNIT_DEFINITIONS['<electron-volt>'] = [%w{eV}, 1.60217653e-19, :energy,%w{<meter> <meter> <kilogram>}, %w{<second> <second>}]
-end
-Unit.setup
-
 module Constants
   module Library
-    # http://physics.nist.gov/cuu/Constants/Table/allascii.txt
-    # masses in u
+
     class Particle
       include ConstantsLibrary
 

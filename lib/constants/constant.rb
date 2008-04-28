@@ -1,6 +1,17 @@
 require 'constants/uncertainty'
 require 'ruby_units'
 
+class Unit < Numeric
+  UNIT_DEFINITIONS['<electron-volt>'] = [%w{eV}, 1.60217653e-19, :energy,%w{<meter> <meter> <kilogram>}, %w{<second> <second>}]
+  UNIT_DEFINITIONS['<kelvin>'] = [%w{K}, 1.3806504e-23, :energy,%w{<meter> <meter> <kilogram>}, %w{<second> <second>}]
+  UNIT_DEFINITIONS['<hartree>'] = [%w{E_h}, 4.35974394e-18, :energy,%w{<meter> <meter> <kilogram>}, %w{<second> <second>}]
+end
+Unit.setup
+
+# KELVIN_JOULE_RELATIONSHIP                          = Physical.new("kelvin-joule relationship", "1.3806504e-23", "0.0000024e-23", "J")
+# ELECTRON_VOLT_JOULE_RELATIONSHIP                   = Physical.new("electron volt-joule relationship", "1.602176487e-19", "0.000000040e-19", "J")
+# HARTREE_JOULE_RELATIONSHIP                         = Physical.new("hartree-joule relationship", "4.35974394e-18", "0.00000022e-18", "J")
+
 module Constants
 
   class Constant 

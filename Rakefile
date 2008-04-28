@@ -69,3 +69,59 @@ task :publish_rdoc => [:rdoc] do
  
   sh %{rsync #{rsync_args} #{local_dir}/ #{host}:#{remote_dir}}
 end
+
+#
+# constants tasks
+#
+
+desc "Regenerate physical constants data"
+task :generate_physical_constants do
+  require 'open-uri'
+  
+  nist_url = "http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt"
+  nist_data = open(nist_url)
+  
+  puts "# Constants from: #{nist_url}"
+  puts "# Date: #{Time.now.to_s}"
+  
+  split_regexp = /^(.+?\s\s)(\d[\de\-\s\.]*?\s\s\s*)(\d[\de\-\s\.]*?\s\s\s*)(.*)$/
+  split_regexp_str = nil
+  constants = []
+  declarations = []
+  nist_data.each_line do |line|
+    next if line =~ /^(\s|-)/
+    
+    unless line =~ split_regexp
+      raise "could not match line:\n#{line}\nwith: #{split_regexp_str}" 
+    end
+    
+    if split_regexp_str == nil
+      split_regexp_str = "^(.{#{$1.length}})(.{#{$2.length}})(.{#{$3.length}})(.*)$"
+      split_regexp = Regexp.new(split_regexp_str)
+      redo
+    end
+    
+    name = $1
+    value = $2
+    uncertainty = $3
+    unit = $4
+    constant = name.split(/[\s\-]/).collect do |word| 
+      word = word.gsub(/\./, "")
+      word = word.gsub("/", "_")
+      
+      word =~ /^[A-z\d]+$/ ? word.upcase : nil
+    end.compact.join("_")
+    
+    if constants.include?(constant)
+      raise "constant name conflict: #{constant}" 
+    end
+    
+    constants << constant
+    declarations << [constant, name.strip, value.gsub(/\s/, ""), uncertainty.gsub(/\s/, "").gsub("(exact)", "0"), unit.strip]
+  end
+  
+  max = constants.inject(0) {|max, c| c.length > max ? c.length : max}
+  declarations.each do |declaration|
+    puts %Q{%-#{max}s = Physical.new("%s", "%s", "%s", "%s")} % declaration
+  end
+end
