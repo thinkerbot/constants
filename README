@@ -1,0 +1,47 @@
+= Molecule
+
+Libraries of molecules ready for mass, abundance, and isotope calculations.  
+
+== Description
+Molecule provides a way to specify molecules by formula and perform common calculations therefrom, such as calculating mass.  Molecule was developed for use in mass spectrometry of proteins where high mass accuracy and sensitivity to isotope abundance is required, and has special functionality for the proteomics field.  The fundamental library is general and easily adaptable to other projects.  
+
+Please notify me through RubyForge if you would like to contribute.
+
+== Usage
+
+  require 'molecule'
+  include Molecule
+  
+  # Definition of a molecule
+  water = Formula.new("H2O")
+  water.mass            # => 18.0105646
+  
+  # Molecule predfines a library for Amino Acid residues
+  a = Residue::A
+  a.name                 # => "Alanine"
+  a.abbr                  # => "Ala"
+  a.formula              # => "C3H5NO"
+  
+  # A smorgasbord of lookup methods
+  a == Residue.A                             # => true
+  a == Residue.a                             # => true
+  a == Residue.ala                          # => true
+  a == Residue.alanine                    # => true
+  
+== Info 
+
+Copyright (c) 2006-2007, Regents of the University of Colorado.
+Developer:: {Simon Chiang}[http://bahuvrihi.wordpress.com], {Biomolecular Structure Program}[http://biomol.uchsc.edu/], {Hansen Lab}[http://hsc-proteomics.uchsc.edu/hansenlab/] 
+Support:: CU Denver School of Medicine Deans Academic Enrichment Fund
+Licence:: MIT-Style
+
+== Installation
+
+Molecule is available as a gem on RubyForge[http://rubyforge.org/projects/bioactive].  Use:
+
+  % gem install molecule
+
+== Element Data
+
+Element isotope, mass, and abundance information was obtained from the NIST {Atomic Weights and Isotopic Compositions}[http://www.physics.nist.gov/PhysRefData/Compositions/index.html] reference.  All isotopes with a non-nil isotopic composition (ie relative abundance) were compiled from this {view}[http://www.physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=&all=all&ascii=ascii2&isotype=all] on 2008-01-22. 
+

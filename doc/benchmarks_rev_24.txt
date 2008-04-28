@@ -1,0 +1,61 @@
+Started
+.......
+test_mass_speed
+                          user     system      total        real
+10k mass              0.016000   0.000000   0.016000 (  0.015000)
+10k mass(prec)        0.047000   0.000000   0.047000 (  0.047000)
+.
+test_operation_speed
+                          user     system      total        real
+10k +                 0.156000   0.000000   0.156000 (  0.156000)
+10k -                 0.204000   0.000000   0.204000 (  0.203000)
+10k *                 0.109000   0.000000   0.109000 (  0.109000)
+...
+test_digest_speed
+                          user     system      total        real
+1kx - 10k/10/0 frag   0.359000   0.015000   0.374000 (  0.375000)
+1kx - 10k/10/1 frag   0.469000   0.016000   0.485000 (  0.484000)
+1kx - 10k/10/2 frag   0.531000   0.094000   0.625000 (  0.625000)
+1kx - 10k/10/3 frag   0.687000   0.094000   0.781000 (  0.782000)
+1kx - 10k/10/0 site   0.297000   0.000000   0.297000 (  0.297000)
+1kx - 10k/10/1 site   0.360000   0.000000   0.360000 (  0.359000)
+1kx - 10k/10/2 site   0.406000   0.015000   0.421000 (  0.422000)
+1kx - 10k/10/3 site   0.437000   0.000000   0.437000 (  0.437000)
+.............
+test_trypsin_digest_speed
+                          user     system      total        real
+1kx - 10k/10/0 site   0.453000   0.000000   0.453000 (  0.453000)
+1kx - 10k/10/1 site   0.547000   0.000000   0.547000 (  0.547000)
+1kx - 10k/10/2 site   0.547000   0.016000   0.563000 (  0.563000)
+1kx - 10k/10/3 site   0.610000   0.000000   0.610000 (  0.609000)
+.........
+test_access_speed
+                          user     system      total        real
+100k TestLib::A       0.046000   0.000000   0.046000 (  0.047000)
+100k TestLib.A        0.750000   0.000000   0.750000 (  0.750000)
+100k TestLib.lookup(:a)  0.625000   0.000000   0.625000 (  0.625000)
+................
+test_parse_simple_speed
+                          user     system      total        real
+10k H(20)             0.719000   0.000000   0.719000 (  0.718000)
+10k H(2)H(2)H(2)H(2)  1.156000   0.000000   1.156000 (  1.157000)
+.
+test_parse_speed
+                          user     system      total        real
+10k H20               0.797000   0.000000   0.797000 (  0.796000)
+10k H2(H2(H2))H2      1.422000   0.000000   1.422000 (  1.422000)
+....
+test_initialize_speed
+                          user     system      total        real
+10k RPPGFSPFR         2.281000   0.000000   2.281000 (  2.313000)
+10k RPPGFSPFR * 10    2.375000   0.000000   2.375000 (  2.375000)
+100 RPPGFSPFR * 1000  0.094000   0.000000   0.094000 (  0.094000)
+..
+test_mass_speed
+                          user     system      total        real
+10k bradykinin.mass   0.031000   0.000000   0.031000 (  0.031000)
+10k bradykinin.mass(prec)  0.047000   0.000000   0.047000 (  0.047000)
+..........
+Finished in 16.969 seconds.
+
+66 tests, 397 assertions, 0 failures, 0 errors
