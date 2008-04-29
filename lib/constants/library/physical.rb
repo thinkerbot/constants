@@ -1,4 +1,3 @@
-require 'constants_library'
 require 'constants/constant'
 
 module Constants
@@ -10,11 +9,11 @@ module Constants
 
       def initialize(name, value, uncertainty, unit)
         @name = name
-        super(value, unit, uncertainty)
+        super(value.to_f, unit, uncertainty.to_f)
       end
 
       # Constants from: http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt
-      # Date: Mon Apr 28 08:57:14 -0600 2008
+      # Date: Mon Apr 28 21:09:29 -0600 2008
       LATTICE_SPACING_OF_SILICON                         = Physical.new("{220} lattice spacing of silicon", "192.0155762e-12", "0.0000050e-12", "m")
       ALPHA_PARTICLE_ELECTRON_MASS_RATIO                 = Physical.new("alpha particle-electron mass ratio", "7294.2995365", "0.0000031", "")
       ALPHA_PARTICLE_MASS                                = Physical.new("alpha particle mass", "6.64465620e-27", "0.00000033e-27", "kg")
@@ -27,13 +26,6 @@ module Constants
       ATOMIC_MASS_CONSTANT                               = Physical.new("atomic mass constant", "1.660538782e-27", "0.000000083e-27", "kg")
       ATOMIC_MASS_CONSTANT_ENERGY_EQUIVALENT             = Physical.new("atomic mass constant energy equivalent", "1.492417830e-10", "0.000000074e-10", "J")
       ATOMIC_MASS_CONSTANT_ENERGY_EQUIVALENT_IN_MEV      = Physical.new("atomic mass constant energy equivalent in MeV", "931.494028", "0.000023", "MeV")
-      ATOMIC_MASS_UNIT_ELECTRON_VOLT_RELATIONSHIP        = Physical.new("atomic mass unit-electron volt relationship", "931.494028e6", "0.000023e6", "eV")
-      ATOMIC_MASS_UNIT_HARTREE_RELATIONSHIP              = Physical.new("atomic mass unit-hartree relationship", "3.4231777149e7", "0.0000000049e7", "E_h")
-      ATOMIC_MASS_UNIT_HERTZ_RELATIONSHIP                = Physical.new("atomic mass unit-hertz relationship", "2.2523427369e23", "0.0000000032e23", "Hz")
-      ATOMIC_MASS_UNIT_INVERSE_METER_RELATIONSHIP        = Physical.new("atomic mass unit-inverse meter relationship", "7.513006671e14", "0.000000011e14", "m^-1")
-      ATOMIC_MASS_UNIT_JOULE_RELATIONSHIP                = Physical.new("atomic mass unit-joule relationship", "1.492417830e-10", "0.000000074e-10", "J")
-      ATOMIC_MASS_UNIT_KELVIN_RELATIONSHIP               = Physical.new("atomic mass unit-kelvin relationship", "1.0809527e13", "0.0000019e13", "K")
-      ATOMIC_MASS_UNIT_KILOGRAM_RELATIONSHIP             = Physical.new("atomic mass unit-kilogram relationship", "1.660538782e-27", "0.000000083e-27", "kg")
       ATOMIC_UNIT_OF_1ST_HYPERPOLARIZABLITY              = Physical.new("atomic unit of 1st hyperpolarizablity", "3.206361533e-53", "0.000000081e-53", "C^3 m^3 J^-2")
       ATOMIC_UNIT_OF_2ND_HYPERPOLARIZABLITY              = Physical.new("atomic unit of 2nd hyperpolarizablity", "6.23538095e-65", "0.00000031e-65", "C^4 m^4 J^-3")
       ATOMIC_UNIT_OF_ACTION                              = Physical.new("atomic unit of action", "1.054571628e-34", "0.000000053e-34", "J s")
@@ -118,13 +110,6 @@ module Constants
       ELECTRON_TO_SHIELDED_HELION_MAG_MOM_RATIO          = Physical.new("electron to shielded helion mag. mom. ratio", "864.058257", "0.000010", "")
       ELECTRON_TO_SHIELDED_PROTON_MAG_MOM_RATIO          = Physical.new("electron to shielded proton mag. mom. ratio", "-658.2275971", "0.0000072", "")
       ELECTRON_VOLT                                      = Physical.new("electron volt", "1.602176487e-19", "0.000000040e-19", "J")
-      ELECTRON_VOLT_ATOMIC_MASS_UNIT_RELATIONSHIP        = Physical.new("electron volt-atomic mass unit relationship", "1.073544188e-9", "0.000000027e-9", "u")
-      ELECTRON_VOLT_HARTREE_RELATIONSHIP                 = Physical.new("electron volt-hartree relationship", "3.674932540e-2", "0.000000092e-2", "E_h")
-      ELECTRON_VOLT_HERTZ_RELATIONSHIP                   = Physical.new("electron volt-hertz relationship", "2.417989454e14", "0.000000060e14", "Hz")
-      ELECTRON_VOLT_INVERSE_METER_RELATIONSHIP           = Physical.new("electron volt-inverse meter relationship", "8.06554465e5", "0.00000020e5", "m^-1")
-      ELECTRON_VOLT_JOULE_RELATIONSHIP                   = Physical.new("electron volt-joule relationship", "1.602176487e-19", "0.000000040e-19", "J")
-      ELECTRON_VOLT_KELVIN_RELATIONSHIP                  = Physical.new("electron volt-kelvin relationship", "1.1604505e4", "0.0000020e4", "K")
-      ELECTRON_VOLT_KILOGRAM_RELATIONSHIP                = Physical.new("electron volt-kilogram relationship", "1.782661758e-36", "0.000000044e-36", "kg")
       ELEMENTARY_CHARGE                                  = Physical.new("elementary charge", "1.602176487e-19", "0.000000040e-19", "C")
       ELEMENTARY_CHARGE_OVER_H                           = Physical.new("elementary charge over h", "2.417989454e14", "0.000000060e14", "A J^-1")
       FARADAY_CONSTANT                                   = Physical.new("Faraday constant", "96485.3399", "0.0024", "C mol^-1")
@@ -133,15 +118,8 @@ module Constants
       FINE_STRUCTURE_CONSTANT                            = Physical.new("fine-structure constant", "7.2973525376e-3", "0.0000000050e-3", "")
       FIRST_RADIATION_CONSTANT                           = Physical.new("first radiation constant", "3.74177118e-16", "0.00000019e-16", "W m^2")
       FIRST_RADIATION_CONSTANT_FOR_SPECTRAL_RADIANCE     = Physical.new("first radiation constant for spectral radiance", "1.191042759e-16", "0.000000059e-16", "W m^2 sr^-1")
-      HARTREE_ATOMIC_MASS_UNIT_RELATIONSHIP              = Physical.new("hartree-atomic mass unit relationship", "2.9212622986e-8", "0.0000000042e-8", "u")
-      HARTREE_ELECTRON_VOLT_RELATIONSHIP                 = Physical.new("hartree-electron volt relationship", "27.21138386", "0.00000068", "eV")
       HARTREE_ENERGY                                     = Physical.new("Hartree energy", "4.35974394e-18", "0.00000022e-18", "J")
       HARTREE_ENERGY_IN_EV                               = Physical.new("Hartree energy in eV", "27.21138386", "0.00000068", "eV")
-      HARTREE_HERTZ_RELATIONSHIP                         = Physical.new("hartree-hertz relationship", "6.579683920722e15", "0.000000000044e15", "Hz")
-      HARTREE_INVERSE_METER_RELATIONSHIP                 = Physical.new("hartree-inverse meter relationship", "2.194746313705e7", "0.000000000015e7", "m^-1")
-      HARTREE_JOULE_RELATIONSHIP                         = Physical.new("hartree-joule relationship", "4.35974394e-18", "0.00000022e-18", "J")
-      HARTREE_KELVIN_RELATIONSHIP                        = Physical.new("hartree-kelvin relationship", "3.1577465e5", "0.0000055e5", "K")
-      HARTREE_KILOGRAM_RELATIONSHIP                      = Physical.new("hartree-kilogram relationship", "4.85086934e-35", "0.00000024e-35", "kg")
       HELION_ELECTRON_MASS_RATIO                         = Physical.new("helion-electron mass ratio", "5495.8852765", "0.0000052", "")
       HELION_MASS                                        = Physical.new("helion mass", "5.00641192e-27", "0.00000025e-27", "kg")
       HELION_MASS_ENERGY_EQUIVALENT                      = Physical.new("helion mass energy equivalent", "4.49953864e-10", "0.00000022e-10", "J")
@@ -149,44 +127,9 @@ module Constants
       HELION_MASS_IN_U                                   = Physical.new("helion mass in u", "3.0149322473", "0.0000000026", "u")
       HELION_MOLAR_MASS                                  = Physical.new("helion molar mass", "3.0149322473e-3", "0.0000000026e-3", "kg mol^-1")
       HELION_PROTON_MASS_RATIO                           = Physical.new("helion-proton mass ratio", "2.9931526713", "0.0000000026", "")
-      HERTZ_ATOMIC_MASS_UNIT_RELATIONSHIP                = Physical.new("hertz-atomic mass unit relationship", "4.4398216294e-24", "0.0000000064e-24", "u")
-      HERTZ_ELECTRON_VOLT_RELATIONSHIP                   = Physical.new("hertz-electron volt relationship", "4.13566733e-15", "0.00000010e-15", "eV")
-      HERTZ_HARTREE_RELATIONSHIP                         = Physical.new("hertz-hartree relationship", "1.519829846006e-16", "0.000000000010e-1", "6 E_h")
-      HERTZ_INVERSE_METER_RELATIONSHIP                   = Physical.new("hertz-inverse meter relationship", "3.335640951...e-9", "0", "m^-1")
-      HERTZ_JOULE_RELATIONSHIP                           = Physical.new("hertz-joule relationship", "6.62606896e-34", "0.00000033e-34", "J")
-      HERTZ_KELVIN_RELATIONSHIP                          = Physical.new("hertz-kelvin relationship", "4.7992374e-11", "0.0000084e-11", "K")
-      HERTZ_KILOGRAM_RELATIONSHIP                        = Physical.new("hertz-kilogram relationship", "7.37249600e-51", "0.00000037e-51", "kg")
       INVERSE_FINE_STRUCTURE_CONSTANT                    = Physical.new("inverse fine-structure constant", "137.035999679", "0.000000094", "")
-      INVERSE_METER_ATOMIC_MASS_UNIT_RELATIONSHIP        = Physical.new("inverse meter-atomic mass unit relationship", "1.3310250394e-15", "0.0000000019e-15", "u")
-      INVERSE_METER_ELECTRON_VOLT_RELATIONSHIP           = Physical.new("inverse meter-electron volt relationship", "1.239841875e-6", "0.000000031e-6", "eV")
-      INVERSE_METER_HARTREE_RELATIONSHIP                 = Physical.new("inverse meter-hartree relationship", "4.556335252760e-8", "0.000000000030e-8", "E_h")
-      INVERSE_METER_HERTZ_RELATIONSHIP                   = Physical.new("inverse meter-hertz relationship", "299792458", "0", "Hz")
-      INVERSE_METER_JOULE_RELATIONSHIP                   = Physical.new("inverse meter-joule relationship", "1.986445501e-25", "0.000000099e-25", "J")
-      INVERSE_METER_KELVIN_RELATIONSHIP                  = Physical.new("inverse meter-kelvin relationship", "1.4387752e-2", "0.0000025e-2", "K")
-      INVERSE_METER_KILOGRAM_RELATIONSHIP                = Physical.new("inverse meter-kilogram relationship", "2.21021870e-42", "0.00000011e-42", "kg")
       INVERSE_OF_CONDUCTANCE_QUANTUM                     = Physical.new("inverse of conductance quantum", "12906.4037787", "0.0000088", "ohm")
       JOSEPHSON_CONSTANT                                 = Physical.new("Josephson constant", "483597.891e9", "0.012e9", "Hz V^-1")
-      JOULE_ATOMIC_MASS_UNIT_RELATIONSHIP                = Physical.new("joule-atomic mass unit relationship", "6.70053641e9", "0.00000033e9", "u")
-      JOULE_ELECTRON_VOLT_RELATIONSHIP                   = Physical.new("joule-electron volt relationship", "6.24150965e18", "0.00000016e18", "eV")
-      JOULE_HARTREE_RELATIONSHIP                         = Physical.new("joule-hartree relationship", "2.29371269e17", "0.00000011e17", "E_h")
-      JOULE_HERTZ_RELATIONSHIP                           = Physical.new("joule-hertz relationship", "1.509190450e33", "0.000000075e33", "Hz")
-      JOULE_INVERSE_METER_RELATIONSHIP                   = Physical.new("joule-inverse meter relationship", "5.03411747e24", "0.00000025e24", "m^-1")
-      JOULE_KELVIN_RELATIONSHIP                          = Physical.new("joule-kelvin relationship", "7.242963e22", "0.000013e22", "K")
-      JOULE_KILOGRAM_RELATIONSHIP                        = Physical.new("joule-kilogram relationship", "1.112650056...e-17", "0", "kg")
-      KELVIN_ATOMIC_MASS_UNIT_RELATIONSHIP               = Physical.new("kelvin-atomic mass unit relationship", "9.251098e-14", "0.000016e-14", "u")
-      KELVIN_ELECTRON_VOLT_RELATIONSHIP                  = Physical.new("kelvin-electron volt relationship", "8.617343e-5", "0.000015e-5", "eV")
-      KELVIN_HARTREE_RELATIONSHIP                        = Physical.new("kelvin-hartree relationship", "3.1668153e-6", "0.0000055e-6", "E_h")
-      KELVIN_HERTZ_RELATIONSHIP                          = Physical.new("kelvin-hertz relationship", "2.0836644e10", "0.0000036e10", "Hz")
-      KELVIN_INVERSE_METER_RELATIONSHIP                  = Physical.new("kelvin-inverse meter relationship", "69.50356", "0.00012", "m^-1")
-      KELVIN_JOULE_RELATIONSHIP                          = Physical.new("kelvin-joule relationship", "1.3806504e-23", "0.0000024e-23", "J")
-      KELVIN_KILOGRAM_RELATIONSHIP                       = Physical.new("kelvin-kilogram relationship", "1.5361807e-40", "0.0000027e-40", "kg")
-      KILOGRAM_ATOMIC_MASS_UNIT_RELATIONSHIP             = Physical.new("kilogram-atomic mass unit relationship", "6.02214179e26", "0.00000030e26", "u")
-      KILOGRAM_ELECTRON_VOLT_RELATIONSHIP                = Physical.new("kilogram-electron volt relationship", "5.60958912e35", "0.00000014e35", "eV")
-      KILOGRAM_HARTREE_RELATIONSHIP                      = Physical.new("kilogram-hartree relationship", "2.06148616e34", "0.00000010e34", "E_h")
-      KILOGRAM_HERTZ_RELATIONSHIP                        = Physical.new("kilogram-hertz relationship", "1.356392733e50", "0.000000068e50", "Hz")
-      KILOGRAM_INVERSE_METER_RELATIONSHIP                = Physical.new("kilogram-inverse meter relationship", "4.52443915e41", "0.00000023e41", "m^-1")
-      KILOGRAM_JOULE_RELATIONSHIP                        = Physical.new("kilogram-joule relationship", "8.987551787...e16", "0", "J")
-      KILOGRAM_KELVIN_RELATIONSHIP                       = Physical.new("kilogram-kelvin relationship", "6.509651e39", "0.000011e39", "K")
       LATTICE_PARAMETER_OF_SILICON                       = Physical.new("lattice parameter of silicon", "543.102064e-12", "0.000014e-12", "m")
       LOSCHMIDT_CONSTANT_101325                          = Physical.new("Loschmidt constant (273.15 K, 101.325 kPa)", "2.6867774e25", "0.0000047e25", "m^-3")
       MAG_CONSTANT                                       = Physical.new("mag. constant", "12.566370614...e-7", "0", "N A^-2")
@@ -248,7 +191,8 @@ module Constants
       NEUTRON_TAU_MASS_RATIO                             = Physical.new("neutron-tau mass ratio", "0.528740", "0.000086", "")
       NEUTRON_TO_SHIELDED_PROTON_MAG_MOM_RATIO           = Physical.new("neutron to shielded proton mag. mom. ratio", "-0.68499694", "0.00000016", "")
       NEWTONIAN_CONSTANT_OF_GRAVITATION                  = Physical.new("Newtonian constant of gravitation", "6.67428e-11", "0.00067e-11", "m^3 kg^-1 s^-2")
-      #NEWTONIAN_CONSTANT_OF_GRAVITATION_OVER_H_BAR_C     = Physical.new("Newtonian constant of gravitation over h-bar c", "6.70881e-39", "0.00067e-39", "(GeV/c^2)^-2")
+      # Expanded units for parsing from: "(GeV/c^2)^-2"
+      NEWTONIAN_CONSTANT_OF_GRAVITATION_OVER_H_BAR_C     = Physical.new("Newtonian constant of gravitation over h-bar c", "6.70881e-39", "0.00067e-39", "GeV^-2 c^-4")
       NUCLEAR_MAGNETON                                   = Physical.new("nuclear magneton", "5.05078324e-27", "0.00000013e-27", "J T^-1")
       NUCLEAR_MAGNETON_IN_EV_T                           = Physical.new("nuclear magneton in eV/T", "3.1524512326e-8", "0.0000000045e-8", "eV T^-1")
       NUCLEAR_MAGNETON_IN_INVERSE_METERS_PER_TESLA       = Physical.new("nuclear magneton in inverse meters per tesla", "2.542623616e-2", "0.000000064e-2", "m^-1 T^-1")
@@ -341,7 +285,8 @@ module Constants
       WEAK_MIXING_ANGLE                                  = Physical.new("weak mixing angle", "0.22255", "0.00056", "")
       WIEN_FREQUENCY_DISPLACEMENT_LAW_CONSTANT           = Physical.new("Wien frequency displacement law constant", "5.878933e10", "0.000010e10", "Hz K^-1")
       WIEN_WAVELENGTH_DISPLACEMENT_LAW_CONSTANT          = Physical.new("Wien wavelength displacement law constant", "2.8977685e-3", "0.0000051e-3", "m K")
-
+      
+      library.add_lookup_by :name
       library.reset
     end
   end

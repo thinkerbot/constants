@@ -1,4 +1,3 @@
-require 'constants_library'
 require 'constants/constant'
 
 module Constants

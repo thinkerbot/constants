@@ -74,20 +74,20 @@ end
 # constants tasks
 #
 
-desc "Regenerate physical constants data"
-task :generate_physical_constants do
+desc "Regenerate physical constants and relationship data"
+task :generate_constants do
   require 'open-uri'
-  
+
   nist_url = "http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt"
   nist_data = open(nist_url)
   
-  puts "# Constants from: #{nist_url}"
-  puts "# Date: #{Time.now.to_s}"
-  
   split_regexp = /^(.+?\s\s)(\d[\de\-\s\.]*?\s\s\s*)(\d[\de\-\s\.]*?\s\s\s*)(.*)$/
   split_regexp_str = nil
+  
   constants = []
   declarations = []
+  units = []
+
   nist_data.each_line do |line|
     next if line =~ /^(\s|-)/
     
@@ -117,11 +117,48 @@ task :generate_physical_constants do
     end
     
     constants << constant
-    declarations << [constant, name.strip, value.gsub(/\s/, ""), uncertainty.gsub(/\s/, "").gsub("(exact)", "0"), unit.strip]
+    type = (constant =~ /_RELATIONSHIP$/ ? units : declarations) 
+    type << [constant, name.strip, value.gsub(/\s/, ""), uncertainty.gsub(/\s/, "").gsub("(exact)", "0"), unit.strip]
   end
   
-  max = constants.inject(0) {|max, c| c.length > max ? c.length : max}
+  puts "# Constants from: #{nist_url}"
+  puts "# Date: #{Time.now.to_s}"
+  
+  max = declarations.inject(0) {|max, c| c.first.length > max ? c.first.length : max}
   declarations.each do |declaration|
     puts %Q{%-#{max}s = Physical.new("%s", "%s", "%s", "%s")} % declaration
   end
+  
+  puts
+  puts "# Relationships from: #{nist_url}"
+  puts "# Date: #{Time.now.to_s}"
+  
+  require 'ruby-units'
+  base_units = Unit.class_eval('@@BASE_UNITS').collect {|u| u[1..-2] }
+  unit_map = Unit.class_eval('@@UNIT_MAP')
+  units = units.collect do |constant, name, value, uncertainty, unit|
+    
+    # parse the relationship units
+    unit_name, relation_name = name.strip.chomp('relationship').split('-', 2).collect do |str| 
+      str.strip!
+      case str
+      when 'atomic mass unit' then 'amu'
+      else str.gsub(/\s/, "-")
+      end
+    end
+    
+    # format constants to sort in the correct declaration order
+    constant = constant.chomp('_RELATIONSHIP')
+    [constant, unit_name, relation_name, value, unit, uncertainty]
+  end
+  
+  max = units.inject(0) {|max, c| c.first.length > max ? c.first.length : max}
+  units.each do |declaration|
+    puts %Q{%-#{max}s = ['%s', '%s', '%s', '%s', '%s']} % declaration
+  end
 end
+
+# desc "Regenerate elements data"
+# task :generate_elements do
+#   
+# end

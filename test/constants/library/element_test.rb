@@ -3,7 +3,11 @@ require 'constants/library/element'
 
 class ElementTest < Test::Unit::TestCase
   include Constants::Library
-
+  
+  #
+  # initialize test
+  #
+  
   def test_initialize
     c = Element::C
     
@@ -18,13 +22,27 @@ class ElementTest < Test::Unit::TestCase
     assert_equal c, Element::INDEX[2]
   end
   
-  def test_class_lookup
+  #
+  # lookup test
+  #
+  
+  def test_lookup
     c = Element::C
-    
     assert_equal c, Element['C']
-    assert_nil Element['Q']
+    assert_equal c, Element['Carbon']
+    assert_equal c, Element[6]
   end
-
+  
+  def test_lookup_is_nil_for_undefined_elements
+    assert_nil Element['Q']
+    assert_nil Element["Madeupium"]
+    assert_nil Element[102]
+  end
+  
+  #
+  # methods test
+  #
+  
   def test_has_isotope?
     assert Element::C.has_isotope?(12)
     assert Element::C.has_isotope?(13)
@@ -49,16 +67,6 @@ class ElementTest < Test::Unit::TestCase
     assert_equal 98.93, Element::C.abundance(12)
     assert_equal 1.07, Element::C.abundance(13)
     assert_equal nil, Element::C.abundance(8)
-  end
-  
-  def test_by_name
-    assert_equal Element::C, Element["Carbon"]
-    assert_nil Element["madeupium"]
-  end
-    
-  def test_by_number
-    assert_equal Element::C, Element[6]
-    assert_nil Element[102]
   end
   
   # vs the Proteome Commons Atom Reference, 2008-01-11
