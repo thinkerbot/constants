@@ -161,7 +161,7 @@ module Constants
     # Adds a collection for the specified attribute or method (evaluated
     # on each value, of course).
     def collect_by_attribute(attribute, exclusion_value=nil, nil_value=nil)
-      collect_by(attribute.to_s, exclusion_value, nil_value) {|value| value.send(attribute) }
+      collect_by(attribute.to_s, exclusion_value, nil_value) {|value| [value, value.send(attribute)] }
     end
     
     # Lookup values by a key.  All indicies will be searched in order; the first 
@@ -206,9 +206,11 @@ module Constants
     def add_from(mod)
       const_names = mod.constants.select do |const_name|
         const = mod.const_get(const_name)
-        block_given? ? yield(const) : const.kind_of?(mod)
+        block_given? ? yield(const) : (mod.kind_of?(Class) ? const.kind_of?(mod) : true)
       end
-      add(*const_names.collect {|const_name| mod.const_get(const_name) })
+      
+      # note const_names must be reversed to preserve declaration order
+      add(*const_names.reverse.collect {|const_name| mod.const_get(const_name) })
     end
     
     # # Specifies a block to execute when values are added to self.  

@@ -5,6 +5,75 @@ class Constants::LibraryTest < Test::Unit::TestCase
   include Constants
   
   #
+  # documentation test
+  #
+
+  module Color
+    include Constants::Library
+
+    RED = 'red'
+    GREEN = 'green'
+    BLUE = 'blue'
+    GREY = 'grey'
+
+    library.index_by('name') {|c| c }
+    reset_library
+  end
+
+  def test_documentation
+
+    #####
+    assert_equal({
+      'red' => Color::RED,
+      'blue' => Color::BLUE,
+      'green' => Color::GREEN,
+      'grey' => Color::GREY}, 
+    Color.index('name'))
+
+    assert_equal Color::RED, Color['red']
+
+    ####
+
+    Color.library.index_by_attribute 'length'
+    assert_equal({
+      3 => Color::RED,
+      4 => [Color::BLUE, Color::GREY],
+      5 => Color::GREEN},
+    Color.index('length'))  
+
+    assert_equal [Color::BLUE, Color::GREY], Color[4]
+
+    ####
+
+    Color.library.collect_by('rgb') {|c| ['green', 'red', 'blue'].include?(c) ? c : nil }
+    assert_equal [Color::RED, Color::GREEN, Color::BLUE], Color.collection('rgb')
+
+    Color.library.collect_by_attribute 'length'
+    assert_equal [nil, nil, nil, Color::RED, [Color::BLUE, Color::GREY], Color::GREEN], Color.collection('length')
+
+    ####
+    Color.library.add('yellow')
+    assert_equal({
+      3 => Color::RED,
+      4 => [Color::BLUE, Color::GREY],
+      5 => Color::GREEN,
+      6 => 'yellow'},
+    Color.index('length'))  
+
+    Color.module_eval %Q{
+      ORANGE = 'orange'
+      reset_library
+    }
+    
+    assert_equal({
+      3 => Color::RED,
+      4 => [Color::BLUE, Color::GREY],
+      5 => Color::GREEN,
+      6 => Color::ORANGE},
+    Color.index('length'))
+  end
+
+  #
   # extend test 
   #
   
@@ -36,9 +105,9 @@ class Constants::LibraryTest < Test::Unit::TestCase
   
   module BenchmarkModule
     include Constants::Library
-    A = 1
+    A = 'A'
     
-    library.index_by_attribute :name
+    library.index_by("name") {|value| value}
     reset_library
   end
 

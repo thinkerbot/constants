@@ -1,55 +1,65 @@
 = Constants
 
-Libraries of physical and chemical constants for scientific calculations.
+Libraries of physical and chemical constants for scientific calculations in Ruby.
 
 == Description
 
 Constants provides libraries of constant values (such as the precise mass of carbon 13, or the 
-spin of a strange quark).  Moreover, the general ConstantsLibrary module is provided to facilitate
-easy, flexible lookup of constants.
+spin of a strange quark).  Additionally provides the Constants::Library module to facilitate
+easy, flexible lookup of constants.  
+
+I have attempted to use reputable sources for the constants data.  Please notify me of any 
+errors and send me suggestions for other constants to include.
+
+* Rubyforge[http://rubyforge.org/projects/bioactive]
+* Lighthouse[http://bahuvrihi.lighthouseapp.com/projects/13504-constants/overview]
+* Github[http://github.com/bahuvrihi/constants/tree/master]
 
 == Usage
 
   require 'constants'
-  include Constants::Library
+  include Constants::Libraries
   
   # Element predefines all chemical elements
   c = Element::C
   c.name                 # => "Carbon"
   c.symbol               # => "C"
-  c.atomic_number        # => 12
+  c.atomic_number        # => 6
+  c.mass(12)             # => 12.0
   c.mass(13)             # => 13.0033548378
   
-  # A smorgasbord of lookup methods
-  c == Element.Carbon         # => true
-  c == Element.C              # => true
-  c == Residue.12             # => true
+  # A smorgasbord of lookups methods
+  c == Element['Carbon']         # => true
+  c == Element['C']              # => true
+  c == Element[6]                # => true
   
-== Info 
-
-Copyright (c) 2006-2007, Regents of the University of Colorado.
-Developer:: {Simon Chiang}[http://bahuvrihi.wordpress.com], {Biomolecular Structure Program}[http://biomol.uchsc.edu/], {Hansen Lab}[http://hsc-proteomics.uchsc.edu/hansenlab/] 
-Support:: CU Denver School of Medicine Deans Academic Enrichment Fund
-Licence:: MIT-Style
-
 == Installation
 
 Constants is available as a gem through GitHub[http://github.com/bahuvrihi/constants/tree/master].  Use:
 
   % gem install constants --source=http://gems.github.com/
 
-== Element Data
+== Info 
+
+Copyright (c) 2006-2008, Regents of the University of Colorado.
+Developer:: {Simon Chiang}[http://bahuvrihi.wordpress.com], {Biomolecular Structure Program}[http://biomol.uchsc.edu/], {Hansen Lab}[http://hsc-proteomics.uchsc.edu/hansenlab/] 
+Support:: CU Denver School of Medicine Deans Academic Enrichment Fund
+Licence:: MIT-Style
+
+= Data Sources
+
+=== Element Data
 
 Element isotope, mass, and abundance information was obtained from the NIST {Atomic Weights and Isotopic Compositions}[http://www.physics.nist.gov/PhysRefData/Compositions/index.html] reference.  All isotopes 
 with a non-nil isotopic composition (ie relative abundance) were compiled from this {view}[http://www.physics.nist.gov/cgi-bin/Compositions/stand_alone.pl?ele=&all=all&ascii=ascii2&isotype=all] 
 on 2008-01-22. 
 
-== Physical Constant Data
+=== Physical Constant Data
 
 The physical constant data is assembled from the NIST {Fundamental Physical Constants}[http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt]
 on 2008-04-28.
 
-== Particle Data
+=== Particle Data
 
 Particle data was assembled from a non-ideal source, wikipedia[http://www.wikipedia.org/], and will remain
-so until I have time to update it with a more reputable scientific source.
+so until I have time to update it with something better.

@@ -2,8 +2,8 @@ require 'constants/constant_library'
 
 module Constants
 
-  # Library adds a library attribute to a module allowing
-  # convenient indexing and access of constants in the module.
+  # Library adds a library to a class or module allowing
+  # convenient indexing and access of constants therein.
   #
   #   module Color
   #     include Constants::Library
@@ -13,15 +13,14 @@ module Constants
   #     BLUE = 'blue'
   #     GREY = 'grey'
   #
-  #     library.index_by 'name' {|c| c }
+  #     library.index_by('name') {|c| c }
+  #     reset_library
   #   end
   #
-  # Now the color constants can be accessed through the index hash,
-  # through [] (which searches all indexes for the first match), or
-  # through a module accessor (provided there is no conflicting
-  # method).
+  # Now the color constants can be accessed through the indicies hash
+  # or through [], which searches all indicies for the first match.
   #
-  #   Color.indicies['name']
+  #   Color.index('name')
   #   # => {
   #   # 'red' => Color::RED,
   #   # 'blue' => Color::BLUE,
@@ -29,13 +28,12 @@ module Constants
   #   # 'grey' => Color::GREY}
   #
   #   Color['red']                # => Color::RED
-  #   Color.red                   # => Color::RED
   #
   # Indexing is simplified for attributes.  Notice that multiple
-  # values matching the same key are grouped:
+  # values matching the same key are stashed into one group:
   #
-  #   Color.library.index_by_attribute 'length', :reader => false
-  #   Color.indicies['length']      
+  #   Color.library.index_by_attribute 'length'
+  #   Color.index('length')
   #   # => {
   #   # 3 => Color::RED,
   #   # 4 => [Color::BLUE, Color::GREY],
@@ -46,12 +44,12 @@ module Constants
   # Constants may also be assembled into ordered collections, which
   # may or may not contain all the constants.
   #
-  #   Colors.library.collect_by 'grb' {|c| ['green', 'red', 'blue'].index(c) }
-  #   Colors.collections['grb']
-  #   # => [Color::GREEN, Color::RED, Color::BLUE]
+  #   Color.library.collect_by('rgb') {|c| ['green', 'red', 'blue'].include?(c) ? c : nil }
+  #   Color.collection('rgb')
+  #   # => [Color::RED, Color::GREEN, Color::BLUE]
   #
-  #   Colors.library.collect_by_attribute 'length'
-  #   Colors.collections['length']
+  #   Color.library.collect_by_attribute 'length'
+  #   Color.collection('length')
   #   # => [nil, nil, nil, Color::RED, [Color::BLUE, Color::GREY], Color::GREEN]
   #
   # New constants (even 'constants' that are not declared in the module) may be
@@ -59,19 +57,19 @@ module Constants
   # are updated automatically.
   #
   #   Color.library.add('yellow')
-  #   Color.indicies['length']      
+  #   Color.index('length')
   #   # => {
   #   # 3 => Color::RED,
   #   # 4 => [Color::BLUE, Color::GREY],
   #   # 5 => Color::GREEN,
-  #   # 6 => Color::YELLOW}
+  #   # 6 => 'yellow'}
   #
   #   module Color
   #     ORANGE = 'orange'
-  #     library.reset
+  #     reset_library
   #   end
   #
-  #   Color.indicies['length']      
+  #   Color.index('length')   
   #   # => {
   #   # 3 => Color::RED,
   #   # 4 => [Color::BLUE, Color::GREY],
@@ -84,20 +82,10 @@ module Constants
   # value then the change will not be reflected in the library until the library
   # is reset.
   #
-  #--
   # == Performance Considerations
   # ConstantsLibrary makes access of constants easier, but at the expense of
   # performance.  Naturally the constant itself is the highest-performing
-  # way of accessing the constant value.  Performance stacks up like this:
-  #
-  #   method        relative time per 1M calls
-  #   Color::RED    1
-  #   Color.red    
-  #   Color['red'] 
-  #
-  # The [] method is always going to be slowest since it is a simple search of
-  # all the available keys.
-  #
+  # way of accessing the constant value.  
   module Library
     
     # Accesses the module constant library.
@@ -126,6 +114,7 @@ module Constants
     protected
     
     def reset_library
+      library.clear
       library.add_from(self)
     end
     

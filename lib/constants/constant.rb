@@ -2,7 +2,8 @@ require 'constants/uncertainty'
 require 'constants/library'
 require 'ruby-units'
 
-class Unit < Numeric
+#-- Should make note of extending ruby-units
+class Unit < Numeric # :nodoc:
   
   # Relationships from: http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt
   # Date: Mon Apr 28 21:09:29 -0600 2008

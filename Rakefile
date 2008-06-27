@@ -19,12 +19,12 @@ end
 #
 spec = Gem::Specification.new do |s|
 	s.name = "constants"
-	s.version = "0.1.0"
+	s.version = "0.8.0"
 	s.author = "Simon Chiang"
 	s.email = "simon.chiang@uchsc.edu"
 	s.homepage = "http://rubyforge.org/projects/bioactive/"
 	s.platform = Gem::Platform::RUBY
-	s.summary = "Libraries of constants.  Includes libraries for elements, molecules, particles, and physical constants."
+	s.summary = "Libraries of constants.  Includes libraries for elements, particles, and physical constants."
   s.rubyforge_project = "bioactive"
 	s.files = File.read("Manifest.txt").strip.split(/\s*\r?\n\s*/).select {|file| file !~ /#/ && File.file?(file) }
 	s.require_path = "lib"
