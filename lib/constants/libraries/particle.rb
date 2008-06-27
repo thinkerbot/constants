@@ -1,10 +1,10 @@
-require 'constants/library/physical'
+require 'constants/libraries/physical'
 
 module Constants
-  module Library
+  module Libraries
 
     class Particle
-      include ConstantsLibrary
+      include Constants::Library
 
       attr_reader :name, :family, :group, :generation, :charge, :spin
 
@@ -62,8 +62,8 @@ module Constants
       GRAVITON = Particle.new('Graviton', "", "", "", 0, 0, 2)
       HIGGS_BOSON = Particle.new('Higgs Boson', "", "", "", "112 GeV/c^2", 0, 0) #">112 GeV/c^2"
       
-      library.add_lookup_by :name
-      library.reset
+      library.index_by_attribute :name
+      reset_library
     
       protected
       

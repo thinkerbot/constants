@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), '../../constants_test_helper.rb') 
-require 'constants/library/particle'
+require 'constants/libraries/particle'
 
 class ParticleTest < Test::Unit::TestCase
-  include Constants::Library
+  include Constants::Libraries
   
   #
   # initialize test

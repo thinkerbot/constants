@@ -19,7 +19,7 @@ class Test::Unit::TestCase
   end
   
   def benchmark_test(length=10, &block) 
-    if ENV["BENCHMARK"] =~ /true/i
+    if ENV["benchmark"] =~ /true/i
       puts
       puts method_name
       bm(length, &block)

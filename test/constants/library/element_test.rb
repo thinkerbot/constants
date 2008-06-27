@@ -1,8 +1,8 @@
 require File.join(File.dirname(__FILE__), '../../constants_test_helper.rb') 
-require 'constants/library/element'
+require 'constants/libraries/element'
 
 class ElementTest < Test::Unit::TestCase
-  include Constants::Library
+  include Constants::Libraries
   
   #
   # initialize test
@@ -75,26 +75,26 @@ class ElementTest < Test::Unit::TestCase
   # The website states 'These values are taken from the NIST's list, http://physics.nist.gov'
   def test_mass_values_vs_proteome_commons
     str = %Q{
-H	1.0078250321	0.999885
-H2	2.014101778	1.15E-4
-O	15.9949146221	0.9975700000000001
-O17	16.9991315	3.7999999999999997E-4
-O18	17.9991604	0.0020499999999999997
-N14	14.0030740052	0.9963200000000001
-N15	15.0001088984	0.00368
-C12	12.0	0.9893000000000001
-C13	13.0033548378	0.010700000000000001
-P31	30.97376151	1.0
-S32	31.97207069	0.9493
-S33	32.9714585	0.0076
-S34	33.96786683	0.0429
-S36	35.96708088	2.0E-4}
+H 1.0078250321  0.999885
+H2  2.014101778 1.15E-4
+O 15.9949146221 0.9975700000000001
+O17 16.9991315  3.7999999999999997E-4
+O18 17.9991604  0.0020499999999999997
+N14 14.0030740052 0.9963200000000001
+N15 15.0001088984 0.00368
+C12 12.0  0.9893000000000001
+C13 13.0033548378 0.010700000000000001
+P31 30.97376151 1.0
+S32 31.97207069 0.9493
+S33 32.9714585  0.0076
+S34 33.96786683 0.0429
+S36 35.96708088 2.0E-4}
 
     atoms = str.split(/\n/)
     atoms.each do |atom_str|
       next if atom_str.empty?
       
-      name, mass, abundance = atom_str.split(/\s/)
+      name, mass, abundance = atom_str.split(/\s+/)
       name =~ /(\w)(\d*)/
       symbol = $1
       isotope = $2.empty? ? nil : $2.to_i
@@ -119,39 +119,39 @@ S36	35.96708088	2.0E-4}
   #
   def test_mass_values_vs_unimod
     str = %Q{
-H	Hydrogen	1.007825035	1.00794
-2H	Deuterium	2.014101779	2.014101779
-Li	Lithium	7.016003	6.941
-C	Carbon	12	12.0107
-13C	Carbon13	13.00335483	13.00335483
-N	Nitrogen	14.003074	14.0067
-15N	Nitrogen15	15.00010897	15.00010897
-O	Oxygen	15.99491463	15.9994
-18O	Oxygen18	17.9991603	17.9991603
-F	Fluorine	18.99840322	18.9984032
-Na	Sodium	22.9897677	22.98977
-P	Phosphorous	30.973762	30.973761
-S	Sulfur	31.9720707	32.065
-Cl	Chlorine	34.96885272	35.453
-K	Potassium	38.9637074	39.0983
-Ca	Calcium	39.9625906	40.078
-Fe	Iron	55.9349393	55.845
-Ni	Nickel	57.9353462	58.6934
-Cu	Copper	62.9295989	63.546
-Zn	Zinc	63.9291448	65.409
-Br	Bromine	78.9183361	79.904
-Se	Selenium	79.9165196	78.96
-Mo	Molybdenum	97.9054073	95.94
-Ag	Silver	106.905092	107.8682
-I	Iodine	126.904473	126.90447
-Au	Gold	196.966543	196.96655
-Hg	Mercury	201.970617	200.59}
+H Hydrogen  1.007825035 1.00794
+2H  Deuterium 2.014101779 2.014101779
+Li  Lithium 7.016003  6.941
+C Carbon  12  12.0107
+13C Carbon13  13.00335483 13.00335483
+N Nitrogen  14.003074 14.0067
+15N Nitrogen15  15.00010897 15.00010897
+O Oxygen  15.99491463 15.9994
+18O Oxygen18  17.9991603  17.9991603
+F Fluorine  18.99840322 18.9984032
+Na  Sodium  22.9897677  22.98977
+P Phosphorous 30.973762 30.973761
+S Sulfur  31.9720707  32.065
+Cl  Chlorine  34.96885272 35.453
+K Potassium 38.9637074  39.0983
+Ca  Calcium 39.9625906  40.078
+Fe  Iron  55.9349393  55.845
+Ni  Nickel  57.9353462  58.6934
+Cu  Copper  62.9295989  63.546
+Zn  Zinc  63.9291448  65.409
+Br  Bromine 78.9183361  79.904
+Se  Selenium  79.9165196  78.96
+Mo  Molybdenum  97.9054073  95.94
+Ag  Silver  106.905092  107.8682
+I Iodine  126.904473  126.90447
+Au  Gold  196.966543  196.96655
+Hg  Mercury 201.970617  200.59}
 
     atoms = str.split(/\n/)
     atoms.each do |atom_str|
       next if atom_str.empty?
       
-      symbol, name, monoisotopic, average = atom_str.split(/\s/)
+      symbol, name, monoisotopic, average = atom_str.split(/\s+/)
       symbol =~ /(\d*)(\w+)/
       isotope = $1.empty? ? nil : $1.to_i
       symbol = $2
@@ -181,7 +181,7 @@ S 31.9720718 32.06}
     atoms.each do |atom_str|
       next if atom_str.empty?
       
-      symbol, monoisotopic, average = atom_str.split(/\s/)
+      symbol, monoisotopic, average = atom_str.split(/\s+/)
       monoisotopic = monoisotopic.to_f
       average = average.to_f
       

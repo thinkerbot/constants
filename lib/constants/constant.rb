@@ -1,5 +1,5 @@
 require 'constants/uncertainty'
-require 'constants_library'
+require 'constants/library'
 require 'ruby-units'
 
 class Unit < Numeric

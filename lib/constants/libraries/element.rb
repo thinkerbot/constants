@@ -1,7 +1,7 @@
 require 'constants/constant'
 
 module Constants
-  module Library
+  module Libraries
 
     # Element encapsulates mass, isotope, and abundance information.   Element
     # is a library for the elements of the periodic table:
@@ -10,7 +10,7 @@ module Constants
     #
     # See the README for information regarding the source of default element data.
     class Element
-      include ConstantsLibrary
+      include Constants::Library
 
       INDEX = ['H', 'O', 'C', 'N', 'S', 'P', 'Fe', 'Ni', 'Se']
 
@@ -178,8 +178,11 @@ module Constants
       Zn = Element.new("Zn", "Zinc", 30, "64:63.9291466(18):48.63(60);66:65.9260368(16):27.90(27);67:66.9271309(17):4.10(13);68:67.9248476(17):18.75(51);70:69.925325(4):0.62(3)", "65.409(4)")
       Zr = Element.new("Zr", "Zirconium", 40, "90:89.9047037(23):51.45(40);91:90.9056450(23):11.22(5);92:91.9050401(23):17.15(8);94:93.9063158(25):17.38(28);96:95.908276(3):2.80(9)", "91.224(2)")
 
-      library.add_lookup_by :symbol, :name, :atomic_number
-      library.reset
+      library.index_by_attribute :symbol
+      library.index_by_attribute :name
+      library.index_by_attribute :atomic_number
+      
+      reset_library
     end
   end
 end
