@@ -10,7 +10,7 @@ class ConstantTest < Test::Unit::TestCase
   
   def test_parse_documentation
     assert_equal [1.0, 0.2], Constant.parse("1.0(2)").to_a
-    assert_equal [1.0078250321, 0.0000000004], Constant.parse("1.007 825 032 1(4)").to_a
+    assert_equal [1.0078250321, 1/2500000000], Constant.parse("1.007 825 032 1(4)").to_a
     assert_equal [6.62606896, nil], Constant.parse("6.626 068 96").to_a
   end
   

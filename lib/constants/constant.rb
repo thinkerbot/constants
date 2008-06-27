@@ -7,8 +7,8 @@ class Unit < Numeric
   # Relationships from: http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt
   # Date: Mon Apr 28 21:09:29 -0600 2008
   # ELECTRON_VOLT_JOULE            = ['electron-volt', 'joule', '1.602176487e-19', 'J', '0.000000040e-19']
-  # KELVIN_JOULE                   = ['kelvin', 'joule', '1.3806504e-23', 'J', '0.0000024e-23']
-  # HARTREE_JOULE                  = ['hartree', 'joule', '4.35974394e-18', 'J', '0.00000022e-18']
+  # KELVIN_JOULE                   = ['kelvin',        'joule', '1.3806504e-23',   'J', '0.0000024e-23']
+  # HARTREE_JOULE                  = ['hartree',       'joule', '4.35974394e-18',  'J', '0.00000022e-18']
   
   UNIT_DEFINITIONS['<electron-volt>'] = [%w{eV}, 1.602176487e-19, :energy, %w{<meter> <meter> <kilogram>}, %w{<second> <second>}]
   UNIT_DEFINITIONS['<kelvin>'] = [%w{K}, 1.3806504e-23, :energy, %w{<meter> <meter> <kilogram>}, %w{<second> <second>}]
@@ -27,9 +27,9 @@ module Constants
       # an uncertainty. When no uncertainty is specified, the uncertainty is nil.  
       # Whitespace is allowed.
       #
-      #  Base.parse("1.0(2)").vu                             # => [1.0, 0.2]
-      #  Base.parse("1.007 825 032 1(4)").vu      # => [1.0078250321, 0.0000000004]
-      #  Base.parse("6.626 068 96").vu                # => [6.62606896, nil]
+      #  Base.parse("1.0(2)").vu                    # => [1.0, 0.2]
+      #  Base.parse("1.007 825 032 1(4)").vu        # => [1.0078250321, 1/2500000000]
+      #  Base.parse("6.626 068 96").vu              # => [6.62606896, nil]
       #
       def parse(str)
         str = str.to_s.gsub(/\s/, '')

@@ -1,6 +1,6 @@
 $: << File.dirname(__FILE__)
 
-require 'constants/library/element'
-require 'constants/library/physical'
-require 'constants/library/particle'
+require 'constants/libraries/element'
+require 'constants/libraries/physical'
+require 'constants/libraries/particle'
 
