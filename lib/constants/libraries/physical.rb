@@ -2,6 +2,8 @@ require 'constants/constant'
 
 module Constants
   module Libraries
+    
+    # Physical is a library of physical constants.
     class Physical < Constant
       
       attr_reader :name
@@ -10,9 +12,11 @@ module Constants
         @name = name
         super(value.to_f, unit, uncertainty.to_f)
       end
-
+      
+      #--
       # Constants from: http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt
       # Date: Mon Apr 28 21:09:29 -0600 2008
+      #++
       LATTICE_SPACING_OF_SILICON                         = Physical.new("{220} lattice spacing of silicon", "192.0155762e-12", "0.0000050e-12", "m")
       ALPHA_PARTICLE_ELECTRON_MASS_RATIO                 = Physical.new("alpha particle-electron mass ratio", "7294.2995365", "0.0000031", "")
       ALPHA_PARTICLE_MASS                                = Physical.new("alpha particle mass", "6.64465620e-27", "0.00000033e-27", "kg")
@@ -112,7 +116,7 @@ module Constants
       ELEMENTARY_CHARGE                                  = Physical.new("elementary charge", "1.602176487e-19", "0.000000040e-19", "C")
       ELEMENTARY_CHARGE_OVER_H                           = Physical.new("elementary charge over h", "2.417989454e14", "0.000000060e14", "A J^-1")
       FARADAY_CONSTANT                                   = Physical.new("Faraday constant", "96485.3399", "0.0024", "C mol^-1")
-      #FARADAY_CONSTANT_FOR_CONVENTIONAL_ELECTRIC_CURRENT = Physical.new("Faraday constant for conventional electric current", "96485.3401", "0.0048", "C_90 mol^-1")
+      #-- FARADAY_CONSTANT_FOR_CONVENTIONAL_ELECTRIC_CURRENT = Physical.new("Faraday constant for conventional electric current", "96485.3401", "0.0048", "C_90 mol^-1")
       FERMI_COUPLING_CONSTANT                            = Physical.new("Fermi coupling constant", "1.16637e-5", "0.00001e-5", "GeV^-2")
       FINE_STRUCTURE_CONSTANT                            = Physical.new("fine-structure constant", "7.2973525376e-3", "0.0000000050e-3", "")
       FIRST_RADIATION_CONSTANT                           = Physical.new("first radiation constant", "3.74177118e-16", "0.00000019e-16", "W m^2")
@@ -190,7 +194,7 @@ module Constants
       NEUTRON_TAU_MASS_RATIO                             = Physical.new("neutron-tau mass ratio", "0.528740", "0.000086", "")
       NEUTRON_TO_SHIELDED_PROTON_MAG_MOM_RATIO           = Physical.new("neutron to shielded proton mag. mom. ratio", "-0.68499694", "0.00000016", "")
       NEWTONIAN_CONSTANT_OF_GRAVITATION                  = Physical.new("Newtonian constant of gravitation", "6.67428e-11", "0.00067e-11", "m^3 kg^-1 s^-2")
-      # Expanded units for parsing from: "(GeV/c^2)^-2"
+      #-- Expanded units for parsing from: "(GeV/c^2)^-2"
       NEWTONIAN_CONSTANT_OF_GRAVITATION_OVER_H_BAR_C     = Physical.new("Newtonian constant of gravitation over h-bar c", "6.70881e-39", "0.00067e-39", "GeV^-2 c^-4")
       NUCLEAR_MAGNETON                                   = Physical.new("nuclear magneton", "5.05078324e-27", "0.00000013e-27", "J T^-1")
       NUCLEAR_MAGNETON_IN_EV_T                           = Physical.new("nuclear magneton in eV/T", "3.1524512326e-8", "0.0000000045e-8", "eV T^-1")

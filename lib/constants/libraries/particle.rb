@@ -3,6 +3,8 @@ require 'constants/libraries/physical'
 module Constants
   module Libraries
 
+    # Particle is a library of fundamental particles, including
+    # mass, charge and spin information.
     class Particle
 
       attr_reader :name, :family, :group, :generation, :charge, :spin

@@ -86,7 +86,7 @@ for a set of constants.  Nothing you couldn't do yourself, but very handy.
 * Constants::Constant could use some development; constants should support mathematical 
   operations and comparisons based on uncertainty as well as value.
 * Ruby doesn't track of the order of constant declaration until Ruby 1.9.  Constants
-  are indexed/collected as they appear in <module>#constants
+  are indexed/collected as they appear in [module].constants
 
 == Installation
 
