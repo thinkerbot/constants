@@ -1,3 +1,4 @@
+require File.join(File.dirname(__FILE__), 'constants_test_helper.rb') 
 require 'constants'
 
 class ReadMeDocTest < Test::Unit::TestCase

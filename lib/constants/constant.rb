@@ -1,5 +1,6 @@
 require 'constants/uncertainty'
 require 'constants/library'
+require 'rubygems'
 require 'ruby-units'
 
 # Adds several units to {ruby-units}[http://rubyforge.org/projects/ruby-units] for use

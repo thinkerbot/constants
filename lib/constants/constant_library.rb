@@ -86,7 +86,7 @@ module Constants
       # Initializes a new Collection (a type of Array).  The block is 
       # used by stash to calculate the values in a collection. 
       def initialize(&block)
-        super()
+        super(&nil)
         @nil_value = nil
         @block = block
       end
