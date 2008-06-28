@@ -37,7 +37,7 @@ me of any errors and send me suggestions for other constants to include.
 === Custom Libraries
 
 Making a new constants library is straightforward using the Constants::Library module.
-The following example is adapted from the molecule[http://github.com/bahuvrihi/molecule/tree/master]
+The following example is adapted from the molecule[http://github.com/bahuvrihi/molecules/tree/master]
 library (a subproject of constants).
 
   # A library of amino acid residues.
