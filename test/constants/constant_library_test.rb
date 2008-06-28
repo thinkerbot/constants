@@ -11,6 +11,19 @@ class ConstantLibraryTest < Test::Unit::TestCase
   end
   
   #
+  # documentation test
+  #
+  
+  def test_documentation
+    lib = ConstantLibrary.new('one', 'two', :three)
+    lib.index_by('upcase') {|value| value.to_s.upcase }
+    assert_equal({'ONE' => 'one', 'TWO' => 'two', 'THREE' => :three}, lib.indicies['upcase'])
+  
+    lib.collect("string") {|value| value.to_s }
+    assert_equal(['one', 'two', 'three'], lib.collections['string'])
+  end
+  
+  #
   # initialize test
   #
   
@@ -35,6 +48,26 @@ class ConstantLibraryTest < Test::Unit::TestCase
   # index_by test
   #
   
+  def test_index_by_documentation
+    lib = ConstantLibrary.new('one', 'two', :one)
+    lib.index_by("string") {|value| value.to_s }
+    assert_equal({
+      'one' => ['one', :one],
+      'two' => 'two'},
+    lib.indicies['string'])
+
+    lib = ConstantLibrary.new(1,2,nil)                          
+    assert_raise(ArgumentError) { lib.index_by("error", false, nil) {|value| value } }
+
+
+    obj = Object.new
+    index = lib.index_by("ok", false, obj) {|value| value }
+    assert_equal 1, index[1]
+    assert_equal nil, index[nil]
+
+    assert_equal obj, index['non-existant']
+  end
+
   def test_index_by_creates_a_new_index_for_the_specified_inputs
     block = lambda {|v| }
     lib.index_by("name", "nil", "nil_value", &block)
@@ -46,6 +79,16 @@ class ConstantLibraryTest < Test::Unit::TestCase
     assert_equal "nil", index.exclusion_value
     assert_equal "nil_value", index.nil_value
     assert_equal block, index.block
+  end
+  
+  def test_index_by_uses_name_as_indicies_key
+    lib.index_by(:sym) {|v| v.to_s }
+    assert lib.indicies.has_key?(:sym)
+    assert !lib.indicies.has_key?('sym')
+    
+    lib.index_by('str') {|v| v.to_s }
+    assert !lib.indicies.has_key?(:str)
+    assert lib.indicies.has_key?('str')
   end
   
   def test_index_stashes_values_by_block
@@ -99,48 +142,75 @@ class ConstantLibraryTest < Test::Unit::TestCase
   end
   
   # 
-  # collect_by test
+  # collect test
   #
   
-  def test_collect_by_creates_a_new_collection_for_the_specified_inputs
+  def test_collect_documentation
+    lib = ConstantLibrary.new('one', 'two', :three)
+    lib.collect("string") {|value| value.to_s }
+    assert_equal ['one', 'two', 'three'], lib.collections['string'] 
+  
+    lib.collect("length") {|value| [value, value.to_s.length] }
+    assert_equal [nil, nil, nil, ['one', 'two'], nil, :three], lib.collections['length']
+  end
+  
+  def test_collect_creates_a_new_collection_for_the_specified_inputs
     block = lambda {|v| }
-    lib.collect_by("name", "nil", "nil_value", &block)
+    lib.collect("name", &block)
     
     assert lib.collections.has_key?('name')
     collection = lib.collections['name']
     
     assert_equal ConstantLibrary::Collection, collection.class
-    assert_equal "nil", collection.exclusion_value
-    assert_equal "nil_value", collection.nil_value
+    assert_equal nil, collection.nil_value
     assert_equal block, collection.block
   end
 
+  def test_collect_uses_name_as_collections_key
+    lib.collect(:sym) {|v| v.to_s }
+    assert lib.collections.has_key?(:sym)
+    assert !lib.collections.has_key?('sym')
+    
+    lib.collect('str') {|v| v.to_s }
+    assert !lib.collections.has_key?(:str)
+    assert lib.collections.has_key?('str')
+  end
+  
   def test_collection_stashes_block_value
-    lib.collect_by("string") {|v| v.to_s }
+    lib.collect("string") {|v| v.to_s }
     assert_equal(['one', 'two', 'one'], lib.collections["string"])
   end
 
   def test_collection_stashes_values_index_pairs_if_returned
     map = {'one' => 2, 'two' => 0}
 
-    lib.collect_by("pairs") {|v| [v, map[v.to_s]] }
+    lib.collect("pairs") {|v| [v, map[v.to_s]] }
     assert_equal(['two', nil, ['one', :one]], lib.collections["pairs"])
   end
 
-  def test_collection_excludes_values_which_return_the_exclusion_value
-    lib.collect_by("exclusion", nil) do |v| 
+  def test_collection_excludes_values_which_return_nil
+    lib.collect("exclusion") do |v| 
       v.kind_of?(String) ? nil : v
     end
     assert_equal([:one], lib.collections["exclusion"])
   end
 
-  def test_collect_by_raises_error_for_no_block_given
-    assert_raise(ArgumentError) { lib.collect_by('name') }
+  def test_collect_raises_error_for_no_block_given
+    assert_raise(ArgumentError) { lib.collect('name') }
   end
 
-  def test_collect_by_returns_collection
-    result = lib.collect_by("name") {|v|}
+  def test_collect_returns_collection
+    result = lib.collect("name") {|v|}
     assert_equal(lib.collections['name'], result)
+  end
+  
+  # 
+  # collect_attribute test
+  #
+  
+  def test_collect_attribute_collects_attribute_values
+    lib.collect_attribute("to_s")
+    assert_equal(['one', 'two', 'one'], lib.collections["to_s"])
   end
 
   #
@@ -181,7 +251,7 @@ class ConstantLibraryTest < Test::Unit::TestCase
   
   def test_clear_clears_all_values_from_lib_indicies_and_collections
     lib.index_by("str") {|v| v.to_s }
-    lib.collect_by("str") {|v| v.to_s }
+    lib.collect("str") {|v| v.to_s }
     
     assert !lib.values.empty?
     assert !lib.indicies['str'].empty?
@@ -196,7 +266,7 @@ class ConstantLibraryTest < Test::Unit::TestCase
   
   def test_clear_only_removes_indicies_and_collections_if_specified
     lib.index_by("str") {|v| v.to_s }
-    lib.collect_by("str") {|v| v.to_s }
+    lib.collect("str") {|v| v.to_s }
     
     lib.clear
     
@@ -229,7 +299,7 @@ class ConstantLibraryTest < Test::Unit::TestCase
   
   def test_add_incorporates_new_values_into_existing_indicies_and_collections
     lib.index_by("str") {|v| v.to_s }
-    lib.collect_by("length") {|v| [v, v.to_s.length] }
+    lib.collect("length") {|v| [v, v.to_s.length] }
     
     lib.add(:one, :two, 'two', 'three')
     assert_equal({'one' => ['one', :one], 'two' => ['two', :two], 'three' => 'three'}, lib.indicies['str'])

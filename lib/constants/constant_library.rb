@@ -2,11 +2,19 @@ require 'constants/stash'
 
 module Constants
 
-  # The underlying class for Constants::Library.library.  See 
-  # Constants::Library for more details.
+  # ConstantLibrary facilitates indexing and collection of a set of values.
+  #
+  #   lib = ConstantLibrary.new('one', 'two', :three)
+  #   lib.index_by('upcase') {|value| value.to_s.upcase }
+  #   lib.indicies['upcase']      # => {'ONE' => 'one', 'TWO' => 'two', 'THREE' => :three}
+  #
+  #   lib.collect("string") {|value| value.to_s }
+  #   lib.collections['string']   # => ['one', 'two', 'three']
+  #
+  # See Constants::Library for more details.
   class ConstantLibrary
     
-    # A hash-based stash to index library objects.
+    # A hash-based Stash to index library objects.
     class Index < Hash
       include Constants::Stash
       
@@ -16,17 +24,25 @@ module Constants
       # Indicates when values are skipped during stash
       attr_reader :exclusion_value
       
-      def initialize(exclusion_value, nil_value, &block)
+      # Initializes a new Index (a type of Hash).  
+      #
+      # The block is used by stash to calculate the key for 
+      # stashing a given value.  If the key equals the exclusion 
+      # value, then the value is skipped.  The new index will
+      # return nil_value for unknown keys (ie it is the default
+      # value for self) and CANNOT be stashed (see Stash). 
+      def initialize(exclusion_value=nil, nil_value=nil, &block)
         super(nil_value, &nil)
         @nil_value = nil_value
         @exclusion_value = exclusion_value
         @block = block
       end
 
-      # Stashes the specified values in self using keys calculated 
-      # by the block.  Values are skipped if the block returns the
-      # exclusion value.  See Constants::ConstantLibrary#index_by for
-      # more details.
+      # Stashes the specified values using keys calculated 
+      # by the block.  Skips values when the block returns 
+      # the exclusion value.  
+      #
+      # See Constants::ConstantLibrary#index_by for more details.
       def stash(values)
         values.each_with_index do |value, index| 
           result = block.call(value)
@@ -42,36 +58,49 @@ module Constants
       end
     end
     
-    # An array-based stash for collections of library objects.
+    # An array-based Stash for collections of library objects.
+    #
+    #-- 
+    # Note: comparison of Index and Collection indicates that
+    # these are highly related classes.  Why no exclusion value
+    # and why no modifiable nil_value for Collection?  Simply
+    # because an array ALWAYS returns nil for uninitialized
+    # locations (esp out-of-bounds locations).  This means that
+    # Stash, which uses the value at self[] to determine when
+    # to stash and when not to stash, must have nil as it's
+    # nil_value to behave correctly.  Effectively treating
+    # nil as an exclusion value for collection works well in
+    # this case since nils cannot be stashed.
+    #
+    # Hashes (ie Index) do not share this behavior.  Since you
+    # can define a default value for missing keys, self[] can
+    # return something other than nil... hence there is an 
+    # opportunity to use non-nil nil_values and non-nil 
+    # exclusion values.
     class Collection < Array
       include Constants::Stash
       
       # The block used to calculate keys during stash
       attr_reader :block
-      
-      # Indicates when values are skipped during stash
-      attr_reader :exclusion_value
-      
-      def initialize(exclusion_value, nil_value, &block)
-        super(0, nil_value, &nil)
-        @nil_value = nil_value
-        @exclusion_value = exclusion_value
+
+      # Initializes a new Collection (a type of Array).  The block is 
+      # used by stash to calculate the values in a collection. 
+      def initialize(&block)
+        super()
+        @nil_value = nil
         @block = block
       end
       
-      # Stashes the specified values in self at indicies calculated 
-      # by the block.  Values are skipped if the block returns the
-      # exclusion value.  See Constants::ConstantLibrary#collect_by for
-      # more details.
+      # Stashes the specified values in self using values calculated 
+      # by the block.  Values are skipped if the block returns nil.  
+      #
+      # See Constants::ConstantLibrary#collect for more details.
       def stash(values)
         values.each do |value| 
           value, index = block.call(value)
-          index = self.length if index == nil
-          
-          case value
-          when exclusion_value then next
-          else super(index, value)
-          end
+          next if value == nil
+        
+          super(index == nil ? self.length : index, value)
         end
         
         self
@@ -81,10 +110,10 @@ module Constants
     # An array of values in the library
     attr_reader :values
     
-    # A hash of name, index pairs tracking the indicies in self
+    # A hash of (name, index) pairs tracking the indicies in self
     attr_reader :indicies
     
-    # A hash of name, collection pairs tracking the collections in self
+    # A hash of (name, collection) pairs tracking the collections in self
     attr_reader :collections
 
     def initialize(*values)
@@ -101,28 +130,40 @@ module Constants
     #   in the place of value
     # - the exclusion_value to exclude the value from the index
     #
+    # When multiple values return the same key, they are stashed into an array.
+    #
+    #   lib = ConstantLibrary.new('one', 'two', :one)
+    #   lib.index_by("string") {|value| value.to_s }
+    #   lib.indicies['string'] 
+    #   # => {
+    #   # 'one' => ['one', :one],
+    #   # 'two' => 'two'} 
+    #  
     # Existing indicies by the specified name are overwritten.
     #
-    # === nil values
+    # ==== nil values
     #
-    # The index stores it's data in a hash, which will return nil_value for
-    # non-existant keys.  Note that index_by will raise an error if you try
-    # to store the nil_value; in short, nils are usually not allowed.  For
-    # example (noting that an unusual exclusion value is set so that the
-    # nil values actually are stored rather than simply being excluded):
+    # The index stores it's data in an Index (ie a Hash) where nil_value
+    # acts as the default value returned for non-existant keys as well as
+    # the stash nil_value.  Hence index_by will raise an error if you try 
+    # to store the nil_value.  
+    # 
+    # This behavior can be seen when the exclusion value is set to something
+    # other than nil, so that the nil value isn't skipped outright:
     #
-    #   lib = Library.new(1,2,nil)                       # the nil will cause trouble
-    #   lib.index_by "error", 10, nil {|value| value }   # ! ArgumentError
+    #   # the nil will cause trouble
+    #   lib = ConstantLibrary.new(1,2,nil)
+    #   lib.index_by("error", false, nil) {|value| value }  # ! ArgumentError
     #
-    # Simply specify an alternate nil_value to index nils; oftentimes an
-    # annonymous Object works well.  However, note that in all cases the
-    # underlying index data store will return this nil value for non-existant
-    # keys.
+    # Specify an alternate nil_value (and exclusion value) to index nils; 
+    # a plain old Object works well. 
     #
     #   obj = Object.new
-    #   index = lib.index_by("ok", 10, obj) {|value| value }
+    #   index = lib.index_by("ok", false, obj) {|value| value }
     #   index[1]                 # => 1
     #   index[nil]               # => nil
+    #
+    #   # remember the nil_value is the default value
     #   index['non-existant']    # => obj
     # 
     def index_by(name, exclusion_value=nil, nil_value=nil, &block) # :yields: value
@@ -133,35 +174,51 @@ module Constants
       index.stash(values)
     end
     
-    # Adds an index for the specified attribute or method (evaluated
-    # on each value, of course).
+    # Adds an index using the attribute or method.  Equivalent to:
+    #
+    #   lib.index_by(attribute) {|value| value.attribute }
+    #
     def index_by_attribute(attribute, exclusion_value=nil, nil_value=nil)
-      index_by(attribute.to_s, exclusion_value, nil_value) {|value| value.send(attribute) }
+      method = attribute.to_sym
+      index_by(attribute, exclusion_value, nil_value) {|value| value.send(method) }
     end
     
-    # Adds a collection to self for all values currently in self.  Works much
-    # like index_by, except that the underlying data store for a collection 
-    # is an array, and the returns of the block are handled accordingly. The 
-    # block receives each value and should return one of the following: 
-    # - a value
+    # Adds a collection to self for all values currently in self.  The block
+    # is used to calculate the values in the collection.  The block receives 
+    # each value in self and should return one of the following: 
+    # - a value to be pushed onto the collection
     # - a [value, index] array when an alternate value should be stored
     #   in the place of value, or when the value should be at a special
-    #   index in the collection
-    # - the exclusion_value to exclude the value from the collection
+    #   index in the collection. When multiple values are directed to the 
+    #   same index, they are stashed into an array.
+    # - nil to exclude the value from the collection
     #
-    # See index_by for additional details regarding exclusion_value and nil_value.
-    def collect_by(name, exclusion_value=nil, nil_value=nil, &block) # :yields: value
+    # For example:
+    #
+    #   lib = ConstantLibrary.new('one', 'two', :three)
+    #   lib.collect("string") {|value| value.to_s }
+    #   lib.collections['string']   # => ['one', 'two', 'three']
+    #
+    #   lib.collect("length") {|value| [value, value.to_s.length] }
+    #   lib.collections['length']   # => [nil, nil, nil, ['one', 'two'], nil, :three]
+    #
+    # Works much like index_by, except that the underlying data store for a 
+    # collection is a Collection (ie an array) rather than an Index (a hash).
+    def collect(name, &block) # :yields: value
       raise ArgumentError.new("no block given") unless block_given?
       
-      collection = Collection.new(exclusion_value, nil_value, &block)
+      collection = Collection.new(&block)
       collections[name] = collection
       collection.stash(values)
     end
     
-    # Adds a collection for the specified attribute or method (evaluated
-    # on each value, of course).
-    def collect_by_attribute(attribute, exclusion_value=nil, nil_value=nil)
-      collect_by(attribute.to_s, exclusion_value, nil_value) {|value| [value, value.send(attribute)] }
+    # Adds a collection using the attribute or method.  Equivalent to:
+    #
+    #   lib.collect(attribute) {|value| value.attribute }
+    #
+    def collect_attribute(attribute)
+      method = attribute.to_sym
+      collect(attribute) {|value| value.send(method) }
     end
     
     # Lookup values by a key.  All indicies will be searched in order; the first 
@@ -203,14 +260,17 @@ module Constants
       new_values
     end
     
-    def add_from(mod)
+    # Adds the constants from the specified module.  If mod is a Class, then
+    # only constants that are a kind of mod will be added.  This behavior
+    # can be altered by providing a block which each constant value; values
+    # are only included if the block evaluates to true.
+    def add_constants_from(mod)
       const_names = mod.constants.select do |const_name|
         const = mod.const_get(const_name)
         block_given? ? yield(const) : (mod.kind_of?(Class) ? const.kind_of?(mod) : true)
       end
-      
-      # note const_names must be reversed to preserve declaration order
-      add(*const_names.reverse.collect {|const_name| mod.const_get(const_name) })
+
+      add(*const_names.collect {|const_name| mod.const_get(const_name) })
     end
     
     # # Specifies a block to execute when values are added to self.  

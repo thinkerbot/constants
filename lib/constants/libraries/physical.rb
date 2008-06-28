@@ -3,8 +3,7 @@ require 'constants/constant'
 module Constants
   module Libraries
     class Physical < Constant
-      include Constants::Library
-
+      
       attr_reader :name
 
       def initialize(name, value, uncertainty, unit)
@@ -286,8 +285,9 @@ module Constants
       WIEN_FREQUENCY_DISPLACEMENT_LAW_CONSTANT           = Physical.new("Wien frequency displacement law constant", "5.878933e10", "0.000010e10", "Hz K^-1")
       WIEN_WAVELENGTH_DISPLACEMENT_LAW_CONSTANT          = Physical.new("Wien wavelength displacement law constant", "2.8977685e-3", "0.0000051e-3", "m K")
       
+      include Constants::Library
       library.index_by_attribute :name
-      reset_library
+      
     end
   end
 end

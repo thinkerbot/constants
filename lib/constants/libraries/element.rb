@@ -3,15 +3,19 @@ require 'constants/constant'
 module Constants
   module Libraries
 
-    # Element encapsulates mass, isotope, and abundance information.   Element
-    # is a library for the elements of the periodic table:
+    # Element is a library of elements in the periodic table, and includes
+    # mass, isotope, and abundance information.   
     #
-    #    Element::He.name        # => "Helium"
+    #    e = Element::He
+    #    e.name                    # => "Helium"
+    #    e.symbol                  # => "He"
+    #    e.atomic_number           # => 2
+    #    e.mass                    # => 4.0026032497
+    #    e.isotopes                # => [3, 4]
+    #    e.abundances              # => [0.000137, 99.999863]
     #
-    # See the README for information regarding the source of default element data.
     class Element
-      include Constants::Library
-
+      
       INDEX = ['H', 'O', 'C', 'N', 'S', 'P', 'Fe', 'Ni', 'Se']
 
       attr_reader :symbol, :name, :atomic_number, :isotopes, :masses, :abundances, :index_max_abundance, :std_atomic_weight
@@ -177,12 +181,11 @@ module Constants
       Yb = Element.new("Yb", "Ytterbium", 70, "168:167.933894(5):0.13(1);170:169.934759(3):3.04(15);171:170.936322(3):14.28(57);172:171.9363777(30):21.83(67);173:172.9382068(30):16.13(27);174:173.9388581(30):31.83(92);176:175.942568(3):12.76(41)", "173.04(3)")
       Zn = Element.new("Zn", "Zinc", 30, "64:63.9291466(18):48.63(60);66:65.9260368(16):27.90(27);67:66.9271309(17):4.10(13);68:67.9248476(17):18.75(51);70:69.925325(4):0.62(3)", "65.409(4)")
       Zr = Element.new("Zr", "Zirconium", 40, "90:89.9047037(23):51.45(40);91:90.9056450(23):11.22(5);92:91.9050401(23):17.15(8);94:93.9063158(25):17.38(28);96:95.908276(3):2.80(9)", "91.224(2)")
-
+      
+      include Constants::Library
       library.index_by_attribute :symbol
       library.index_by_attribute :name
       library.index_by_attribute :atomic_number
-      
-      reset_library
     end
   end
 end

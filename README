@@ -4,12 +4,13 @@ Libraries of physical and chemical constants for scientific calculations in Ruby
 
 == Description
 
-Constants provides libraries of constant values (such as the precise mass of carbon 13, or the 
-spin of a strange quark).  Additionally provides the Constants::Library module to facilitate
-easy, flexible lookup of constants.  
+Constants provides libraries of constant values such as the precise mass of carbon 13, or 
+the spin of a strange quark.  When applicable, the constant values include uncertainty and
+units (via {ruby-units}[http://rubyforge.org/projects/ruby-units]).  Also provides 
+Constants::Library to index and generate common collections of constant values.
 
-I have attempted to use reputable sources for the constants data.  Please notify me of any 
-errors and send me suggestions for other constants to include.
+I have attempted to use reputable sources for the constants data (see below).  Please notify 
+me of any errors and send me suggestions for other constants to include.
 
 * Rubyforge[http://rubyforge.org/projects/bioactive]
 * Lighthouse[http://bahuvrihi.lighthouseapp.com/projects/13504-constants/overview]
@@ -25,14 +26,68 @@ errors and send me suggestions for other constants to include.
   c.name                 # => "Carbon"
   c.symbol               # => "C"
   c.atomic_number        # => 6
-  c.mass(12)             # => 12.0
+  c.mass                 # => 12.0
   c.mass(13)             # => 13.0033548378
   
   # A smorgasbord of lookups methods
-  c == Element['Carbon']         # => true
-  c == Element['C']              # => true
-  c == Element[6]                # => true
-  
+  Element['Carbon']      # => Element::C
+  Element['C']           # => Element::C
+  Element[6]             # => Element::C
+
+=== Custom Libraries
+
+Making a new constants library is straightforward using the Constants::Library module.
+The following example is adapted from the molecule[http://github.com/bahuvrihi/molecule/tree/master]
+library (a subproject of constants).
+
+  # A library of amino acid residues.
+  class Residue
+    attr_reader :letter, :abbr, :name
+
+    def initialize(letter, abbr, name)
+      @letter = letter
+      @abbr = abbr
+      @name = name
+    end
+
+    A = Residue.new('A', "Ala", "Alanine")
+    C = Residue.new('C', "Cys", "Cysteine")
+    D = Residue.new('D', "Asp", "Aspartic Acid")
+    # ... normally you'd add the rest here ...
+
+    include Constants::Library
+
+    # add an index by an attribute or method
+    library.index_by_attribute :letter
+
+    # add an index where keys are calculated by a block
+    library.index_by 'upcase abbr' do |residue|
+      residue.abbr.upcase
+    end
+    
+    # add a collection (same basic idea, but using an array)
+    library.collect_attribute 'name'
+  end
+
+  # index access through []
+  Residue['D']                   # => Residue::D
+  Residue['ALA']                 # => Residue::A
+
+  # access an index hash or collection array
+  Residue.index('upcase abbr')   # => {'ALA' => Residue::A, 'CYS' => Residue::C, 'ASP' => Residue::D}
+  Residue.collection('name')     # => ["Alanine", "Cysteine", "Aspartic Acid"]
+
+As you can see, Constants::Library allows the predefinition of common views generated
+for a set of constants.  Nothing you couldn't do yourself, but very handy.
+
+== Known Issues
+
+* Particle data is from an unreliable source
+* Constants::Constant could use some development; constants should support mathematical 
+  operations and comparisons based on uncertainty as well as value.
+* Ruby doesn't track of the order of constant declaration until Ruby 1.9.  Constants
+  are indexed/collected as they appear in <module>#constants
+
 == Installation
 
 Constants is available as a gem through GitHub[http://github.com/bahuvrihi/constants/tree/master].  Use:
@@ -46,8 +101,6 @@ Developer:: {Simon Chiang}[http://bahuvrihi.wordpress.com], {Biomolecular Struct
 Support:: CU Denver School of Medicine Deans Academic Enrichment Fund
 Licence:: MIT-Style
 
-= Data Sources
-
 === Element Data
 
 Element isotope, mass, and abundance information was obtained from the NIST {Atomic Weights and Isotopic Compositions}[http://www.physics.nist.gov/PhysRefData/Compositions/index.html] reference.  All isotopes 
@@ -58,6 +111,13 @@ on 2008-01-22.
 
 The physical constant data is assembled from the NIST {Fundamental Physical Constants}[http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt]
 on 2008-04-28.
+
+Constants adds several units to ruby-units to support the physical constants 
+reported in the NIST data.  These are (as reported in the NIST data):
+
+electron-volt:: 1.602176487e-19 joules
+kelvin:: 1.3806504e-23 joules
+hartree:: 4.35974394e-18 joules
 
 === Particle Data
 

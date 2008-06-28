@@ -2,8 +2,9 @@ require 'constants/uncertainty'
 require 'constants/library'
 require 'ruby-units'
 
-#-- Should make note of extending ruby-units
-class Unit < Numeric # :nodoc:
+# Adds several units to {ruby-units}[http://rubyforge.org/projects/ruby-units] for use
+# in reporting physical constant data.  See the README.
+class Unit < Numeric
   
   # Relationships from: http://www.physics.nist.gov/cuu/Constants/Table/allascii.txt
   # Date: Mon Apr 28 21:09:29 -0600 2008
@@ -18,7 +19,9 @@ end
 Unit.setup
 
 module Constants
-
+  
+  # Constant tracks the value, uncertainty, and unit of measurement for a
+  # measured quantity.  Units are tracked via {ruby-units}[http://rubyforge.org/projects/ruby-units].
   class Constant 
     include Comparable
 
@@ -49,8 +52,17 @@ module Constants
         block_given? ? yield(value, unit, uncertainty) : new(value, unit, uncertainty)
       end
     end
-
-    attr_reader :value, :uncertainty, :unit
+    
+    # The measured value of the constant
+    attr_reader :value
+    
+    # The uncertainty of the measured value.  May be exact or unknown,
+    # represented by Uncertainty::EXACT (0) and Uncertainty::UNKNOWN 
+    # (nil) respectively.
+    attr_reader :uncertainty
+    
+    # The units of the measured value, may be nil for unitless constants
+    attr_reader :unit
 
     def initialize(value, unit=nil, uncertainty=Uncertainty::UNKNOWN)
       @value = value
@@ -58,10 +70,21 @@ module Constants
       @uncertainty = uncertainty
     end
     
+    # For Numeric inputs, compares value to another.  For all other inputs,
+    # peforms the default == comparison.
+    def ==(another)
+      case another
+      when Numeric then value == another
+      else super(another)
+      end
+    end
+    
+    # Compares the value of another to the value of self.
     def <=>(another)
       value <=> another.value
     end
     
+    # Returns the array: [value, uncertainty]
     def to_a
       [value, uncertainty]
     end

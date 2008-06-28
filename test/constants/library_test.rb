@@ -9,63 +9,58 @@ class Constants::LibraryTest < Test::Unit::TestCase
   #
 
   module Color
-    include Constants::Library
-
     RED = 'red'
     GREEN = 'green'
     BLUE = 'blue'
     GREY = 'grey'
 
+    include Constants::Library
     library.index_by('name') {|c| c }
-    reset_library
   end
 
-  def test_documentation
-
-    #####
+  def test_documentation 
+    ###
     assert_equal({
       'red' => Color::RED,
       'blue' => Color::BLUE,
       'green' => Color::GREEN,
-      'grey' => Color::GREY}, 
+      'grey' => Color::GREY},
     Color.index('name'))
 
     assert_equal Color::RED, Color['red']
 
-    ####
-
+    ###
     Color.library.index_by_attribute 'length'
-    assert_equal({
+    const_ordered_assert_equal({
       3 => Color::RED,
       4 => [Color::BLUE, Color::GREY],
       5 => Color::GREEN},
-    Color.index('length'))  
+    Color.index('length'))
 
-    assert_equal [Color::BLUE, Color::GREY], Color[4]
+    const_ordered_assert_equal [Color::BLUE, Color::GREY], Color[4]
+    
+    ###
+    Color.library.collect('gstar') {|c| c =~ /^g/ ? c : nil }
+    const_ordered_assert_equal [Color::GREEN, Color::GREY], Color.collection('gstar')
 
-    ####
+    Color.library.collect_attribute 'length'
+    const_ordered_assert_equal [3,5,4,4], Color.collection('length')
 
-    Color.library.collect_by('rgb') {|c| ['green', 'red', 'blue'].include?(c) ? c : nil }
-    assert_equal [Color::RED, Color::GREEN, Color::BLUE], Color.collection('rgb')
-
-    Color.library.collect_by_attribute 'length'
-    assert_equal [nil, nil, nil, Color::RED, [Color::BLUE, Color::GREY], Color::GREEN], Color.collection('length')
-
-    ####
+    ###
     Color.library.add('yellow')
-    assert_equal({
+    const_ordered_assert_equal({
       3 => Color::RED,
       4 => [Color::BLUE, Color::GREY],
       5 => Color::GREEN,
       6 => 'yellow'},
-    Color.index('length'))  
+    Color.index('length'))
 
     Color.module_eval %Q{
       ORANGE = 'orange'
       reset_library
     }
-    
-    assert_equal({
+
+    const_ordered_assert_equal({
       3 => Color::RED,
       4 => [Color::BLUE, Color::GREY],
       5 => Color::GREEN,

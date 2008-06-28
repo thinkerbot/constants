@@ -5,6 +5,20 @@ class ElementTest < Test::Unit::TestCase
   include Constants::Libraries
   
   #
+  # documentation test
+  #
+  
+  def test_documentation
+    e = Element::He
+    assert_equal "Helium", e.name
+    assert_equal "He", e.symbol
+    assert_equal 2, e.atomic_number
+    assert_equal 4.0026032497, e.mass
+    assert_equal [3, 4], e.isotopes
+    assert_equal [0.000137, 99.999863], e.abundances
+  end
+  
+  #
   # initialize test
   #
   

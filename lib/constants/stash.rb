@@ -24,8 +24,9 @@ module Constants
   #
   # The stash method requires some kind of flag to differentiate when a new
   # value should be stored and when the existing value and new value
-  # should be converted into a StashArray.  If the existing value is equal 
-  # to the nil_value, then the new value is stored directly.
+  # should be converted into a StashArray.  If the existing value as 
+  # determined by [] is equal to the nil_value, then the new value is 
+  # stored through []=.
   #
   #  s = StashingHash.new
   #  s['key']                # => nil    
@@ -41,8 +42,7 @@ module Constants
   # so the new value is set.  In the second case, the existing value for 'key' 
   # does not equal the nil_value; stash takes this as a signal that a 
   # non-unique key was specified and collects the values into a StashArray.
-  # As a consequence, the nil_value (nor StashArrays) are allowed as stashing
-  # values:
+  # As a consequence, neither the nil_value nor StashArrays may be stashed.
   #
   #   s.stash('key', nil)   # ! ArgumentError
   #
@@ -61,11 +61,13 @@ module Constants
     attr_accessor :nil_value
     
     # Assigns the value to key in store.  If the store already has a
-    # non-nil_value at key, then the existing and new value will be 
-    # concatenated into a StashArray.  All subsequent values are added
-    # to the StashArray.
+    # non-nil_value at key (as determined by []), then the existing 
+    # and new value will be concatenated into a StashArray.  All 
+    # subsequent values are added to the StashArray.  stash uses
+    # the []= method to set values.
     #
-    # nil_value and StashArray values cannot be stashed; either raises an error.
+    # nil_value and StashArray values cannot be stashed; either raises 
+    # an error.
     def stash(key, value)
       case value
       when nil_value

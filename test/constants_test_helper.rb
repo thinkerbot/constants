@@ -28,4 +28,24 @@ class Test::Unit::TestCase
     end
   end
   
+  def const_ordered_assert_equal(a,b, msg=nil)
+    if RUBY_VERSION =~ /^1.8/
+      print "*"
+      
+      case a
+      when Array
+        assert_equal a.sort, b.sort, msg
+      when Hash
+        [a,b].each do |hash|
+          hash.each_pair do |key, value|
+            value.sort! if value.kind_of?(Array)
+          end
+        end
+        assert_equal a, b, msg
+      end    
+    else
+      assert_equal a, b, msg
+    end
+  end
+  
 end

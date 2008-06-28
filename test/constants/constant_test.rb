@@ -25,5 +25,53 @@ class ConstantTest < Test::Unit::TestCase
     assert_equal [1000, 100], Constant.parse("1.0(1)e3").to_a
     assert_equal [0.001, 0.0001], Constant.parse("1.0(1)e-3").to_a
   end
+  
+  #
+  # == test
+  #
+  
+  def test_equal_compares_Numerics_with_value
+    c = Constant.new(1.23)
+    assert c == 1.23
+    assert c != 1.24
+    
+    assert_equal 1.23, c
+    assert_not_equal 1.24, c
+  end
+  
+  def test_equal_compares_non_Numerics_directly
+    c1 = Constant.new(1.23)
+    c2 = Constant.new(1.23)
+    c3 = Constant.new(1.24)
+    
+    assert c1 == c2
+    assert c1 != c3
+  end
+  
+  #
+  # <=> test
+  #
+  
+  def test_compare_compares_on_value
+    c1 = Constant.new(1.23)
+    c2 = Constant.new(1.23)
+    c3 = Constant.new(1.24)
+    
+    assert_equal 0, c1 <=> c2
+    assert_equal -1, c1 <=> c3
+    assert_equal 1, c3 <=> c1
+  end
+  
+  #
+  # to_a test
+  #
+  
+  def test_to_a_returns_value_uncertainty_array
+    c = Constant.new(1.23)
+    assert_equal [1.23, nil], c.to_a
+    
+    c = Constant.new(1.23, nil, 0.03)
+    assert_equal [1.23, 0.03], c.to_a
+  end
  
 end
