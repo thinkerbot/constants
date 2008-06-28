@@ -7,7 +7,31 @@ Gem::Specification.new do |s|
 	s.platform = Gem::Platform::RUBY
 	s.summary = "Libraries of constants.  Includes libraries for elements, particles, and physical constants."
   s.rubyforge_project = "bioactive"
-	s.files = File.read("Manifest.txt").strip.split(/\s*\r?\n\s*/).select {|file| file !~ /#/ && File.file?(file) }
+	s.files = %w{
+    MIT-LICENSE
+    Rakefile
+    README
+    lib/constants/constant.rb
+    lib/constants/constant_library.rb
+    lib/constants/libraries/element.rb
+    lib/constants/libraries/particle.rb
+    lib/constants/libraries/physical.rb
+    lib/constants/library.rb
+    lib/constants/stash.rb
+    lib/constants/uncertainty.rb
+    lib/constants.rb
+    test/constants/constant_library_test.rb
+    test/constants/constant_test.rb
+    test/constants/libraries/element_test.rb
+    test/constants/libraries/particle_test.rb
+    test/constants/libraries/physical_test.rb
+    test/constants/library_test.rb
+    test/constants/stash_test.rb
+    test/constants_test_helper.rb
+    test/constants_test_suite.rb
+    test/readme_doc_test.rb
+	}
+	
 	s.require_path = "lib"
 	s.test_file = "test/constants_test_suite.rb"
 	

@@ -92,7 +92,7 @@ for a set of constants.  Nothing you couldn't do yourself, but very handy.
 
 Constants is available as a gem through GitHub[http://github.com/bahuvrihi/constants/tree/master].  Use:
 
-  % gem install constants --source=http://gems.github.com/
+  % gem install bahuvrihi-constants --source=http://gems.github.com
 
 == Info 
 

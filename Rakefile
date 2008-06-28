@@ -2,6 +2,7 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
+require 'yaml'
 
 # tasks
 desc 'Default: Run tests.'
@@ -18,13 +19,26 @@ end
 # admin tasks
 #
 
+def gemspec
+  data = File.read('constants.gemspec')
+  spec = nil
+  Thread.new { spec = eval("$SAFE = 3\n#{data}") }.join
+  spec
+end
+
+task :print_manifest do
+  gemspec.files.each do |file| 
+    puts("%-5s : %s" % [File.exists?(file), file])
+  end
+end
+
 desc 'Generate documentation.'
 Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_dir = 'rdoc'
   rdoc.title    = 'constants' 
   rdoc.options << '--line-numbers' << '--inline-source'
   rdoc.rdoc_files.include(["README", 'MIT-LICENSE'])
-  rdoc.rdoc_files.include(spec.files.select {|file| file =~ /^lib/})
+  rdoc.rdoc_files.include(gemspec.files.select {|file| file =~ /^lib/})
 end
 
 desc "Publish RDoc to RubyForge"
@@ -33,7 +47,7 @@ task :publish_rdoc => [:rdoc] do
   host = "#{config["username"]}@rubyforge.org"
   
   rsync_args = "-v -c -r"
-  remote_dir = "/var/www/gforge-projects/bioactive/molecule"
+  remote_dir = "/var/www/gforge-projects/bioactive/constants"
   local_dir = "rdoc"
  
   sh %{rsync #{rsync_args} #{local_dir}/ #{host}:#{remote_dir}}
