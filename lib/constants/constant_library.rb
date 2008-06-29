@@ -222,15 +222,13 @@ module Constants
     end
     
     # Lookup values by a key.  All indicies will be searched in order; the first 
-    # matching value is returned.  If no matches are found, values is searched 
-    # for an value that equals the key.  If found, the matching value is returned,
-    # otherwise the return will be nil. 
+    # matching value is returned.  Returns nil if no matches are found. 
     def [](key)
       indicies.values.each do |index|
         return index[key] if index.has_key?(key)
       end
     
-      values.include?(key) ? key : nil
+      nil
     end
     
     # Clears all values, from self, indicies, and collections.  The indicies, 

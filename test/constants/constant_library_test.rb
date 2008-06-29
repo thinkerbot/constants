@@ -225,11 +225,6 @@ class ConstantLibraryTest < Test::Unit::TestCase
     assert_equal ['one', 'two', :one], lib[3]
   end
   
-  def test_get_searches_items_for_match_if_no_indicies_match
-    assert lib.indicies.empty?
-    assert_equal 'one', lib['one']
-  end
-  
   def test_get_returns_nil_if_no_matches_are_found
     assert_equal nil, lib['three']
   end
