@@ -16,10 +16,36 @@ module Constants
     #
     class Element
       
-      INDEX = ['H', 'O', 'C', 'N', 'S', 'P', 'Fe', 'Ni', 'Se']
-
-      attr_reader :symbol, :name, :atomic_number, :isotopes, :masses, :abundances, :index_max_abundance, :std_atomic_weight
-      attr_reader :index
+      # The symbol of the element (C)
+      attr_reader :symbol
+      
+      # The name of the element (Carbon)
+      attr_reader :name
+      
+      # The atomic number of the element, ie the number
+      # of protons in the element (6)
+      attr_reader :atomic_number
+      
+      # An array the mass numbers of element isotopes 
+      # in mass order ([12, 13])
+      attr_reader :isotopes
+      
+      # An array the masses of element isotopes
+      # in mass order ([12.0 Da, 13.0033548378 Da])
+      attr_reader :masses
+      
+      # An array the isotopic abundances of element isotopes
+      # in mass order ([98.93, 1.07])
+      attr_reader :abundances
+      
+      # The index of the most abundant isotope (0)
+      attr_reader :index_max_abundance
+      
+      # The standard atomic weight of the element, ie
+      # the mean relative atomic mass of an element in 
+      # the Earth's crust and atmosphere as determined
+      # by IUPAC (12.0107 Da)
+      attr_reader :std_atomic_weight
 
       def initialize(symbol, name, atomic_number, attributes, std_atomic_weight)
         @symbol = symbol
@@ -43,24 +69,15 @@ module Constants
             @index_max_abundance = i
           end
         end
-
-        # turn into an on_add...
-        element_index = Element::INDEX
-        @index = element_index.index(symbol)
-        if @index == nil
-          @index = element_index.length
-          element_index << symbol
-        end
-        element_index[@index] = self
-
       end
 
-      # True if the element contains an isotope of the given mass number (12 in carbon-12).
+      # True if the element contains an isotope of the given mass number.
       def has_isotope?(n)
         !index_isotope(n).nil?
       end
 
-      # Index of the isotope of the given mass number (12 in carbon-12) .
+      # Index of the isotope in isotopes, masses, and abundance of the 
+      # given mass number.
       def index_isotope(n)
         isotopes.index(n)
       end
@@ -73,7 +90,10 @@ module Constants
         i = index_isotope(n)
         i == nil ? nil : masses[i].value
       end
-
+      
+      # Returns the uncertainty of the mass of the isotope with the 
+      # given mass number. By default, returns the mass uncertainty 
+      # of the most abundant isotope.
       def mass_uncertainty(n=nil)
         return masses[index_max_abundance].uncertainty if n == nil
 
@@ -82,7 +102,7 @@ module Constants
       end
 
       # Gets the abundance of the isotope with the given mass number.  
-      # By default, returns the  abundance of the most abundant isotope.  
+      # By default, returns the abundance of the most abundant isotope.  
       def abundance(n=nil)
         return abundances[index_max_abundance].value if n == nil
 
@@ -90,6 +110,9 @@ module Constants
         i == nil ? nil : abundances[i].value
       end 
 
+      # Returns the uncertainty of the abundance of the isotope with the 
+      # given mass number. By default, returns the abundance uncertainty 
+      # of the most abundant isotope.
       def abundance_uncertainty(n=nil)
         return abundances[index_max_abundance].uncertainty if n == nil
 

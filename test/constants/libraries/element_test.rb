@@ -32,8 +32,6 @@ class ElementTest < Test::Unit::TestCase
     assert_equal [[12.0, 0], [13.0033548378, 0.000000001]], c.masses.collect {|m| m.to_a}
     assert_equal [[98.93, 0.08], [1.07, 0.08]], c.abundances.collect {|m| m.to_a}
     assert_equal 0, c.index_max_abundance
-    assert_equal 2, c.index
-    assert_equal c, Element::INDEX[2]
   end
   
   #
