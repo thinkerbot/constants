@@ -7,6 +7,16 @@ Gem::Specification.new do |s|
 	s.platform = Gem::Platform::RUBY
 	s.summary = "Libraries of constants.  Includes libraries for elements, particles, and physical constants."
   s.rubyforge_project = "bioactive"
+  s.require_path = "lib"
+	s.test_file = "test/constants_test_suite.rb"
+	s.has_rdoc = true
+  s.add_dependency("ruby-units", ">=1.1.3")
+  
+	s.extra_rdoc_files = %w{
+    README
+    MIT-LICENSE
+  }
+  
 	s.files = %w{
     MIT-LICENSE
     Rakefile
@@ -31,11 +41,4 @@ Gem::Specification.new do |s|
     test/constants_test_suite.rb
     test/readme_doc_test.rb
 	}
-	
-	s.require_path = "lib"
-	s.test_file = "test/constants_test_suite.rb"
-	
-	s.has_rdoc = true
-	s.extra_rdoc_files = ["README", 'MIT-LICENSE']
-  s.add_dependency("ruby-units", ">=1.1.3")
 end

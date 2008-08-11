@@ -90,9 +90,9 @@ for a set of constants.  Nothing you couldn't do yourself, but very handy.
 
 == Installation
 
-Constants is available as a gem through GitHub[http://github.com/bahuvrihi/constants/tree/master].  Use:
+Constants is available as a gem through RubyForge[http://rubyforge.org/projects/bioactive].  Use:
 
-  % gem install bahuvrihi-constants --source=http://gems.github.com
+  % gem install constants
 
 == Info 
 
