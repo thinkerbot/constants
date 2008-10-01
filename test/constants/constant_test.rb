@@ -58,7 +58,7 @@ class ConstantTest < Test::Unit::TestCase
     c3 = Constant.new(1.24)
     
     assert_equal 0, c1 <=> c2
-    assert_equal -1, c1 <=> c3
+    assert_equal(-1, c1 <=> c3)
     assert_equal 1, c3 <=> c1
   end
   

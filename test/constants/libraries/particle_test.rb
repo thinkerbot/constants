@@ -24,7 +24,7 @@ class ParticleTest < Test::Unit::TestCase
     assert_equal "Fermion", t.family
     assert_equal "Lepton", t.group
     assert_equal "Third", t.generation
-    assert_equal -1, t.charge
+    assert_equal(-1, t.charge)
     assert_equal 0.5, t.spin
   end
   

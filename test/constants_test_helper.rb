@@ -1,37 +1,28 @@
 require 'rubygems'
-require 'test/unit'
-require 'benchmark'
+require 'tap/test'
+require 'tap/test/subset_test_class'
 require 'pp'
 
 class Test::Unit::TestCase
-  include Benchmark
-
+  acts_as_subset_test
+  
+  condition(:ruby_1_8) { RUBY_VERSION =~ /^1.8/ }
+  condition(:ruby_1_9) { RUBY_VERSION =~ /^1.9/ }
+  
   #
   # mass tests
   #
-  
+
   def delta_mass
     10**-5
   end
-  
+
   def delta_abundance
     10**-1
   end
-  
-  def benchmark_test(length=10, &block) 
-    if ENV["benchmark"] =~ /true/i
-      puts
-      puts method_name
-      bm(length, &block)
-    else
-      print 'b'
-    end
-  end
-  
+
   def const_ordered_assert_equal(a,b, msg=nil)
-    if RUBY_VERSION =~ /^1.8/
-      print "*"
-      
+    condition_test(:ruby_1_8) do
       case a
       when Array
         assert_equal a.sort, b.sort, msg
@@ -43,9 +34,10 @@ class Test::Unit::TestCase
         end
         assert_equal a, b, msg
       end    
-    else
+    end
+    
+    condition_test(:ruby_1_9) do
       assert_equal a, b, msg
     end
   end
-  
-end
+end unless Test::Unit::TestCase.kind_of?(Tap::Test::SubsetTestClass)
